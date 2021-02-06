@@ -5,7 +5,7 @@
   <include file="$(find turtlebot3_bringup)/launch/turtlebot3_core.launch">
     <arg name="multi_robot_name" value="$(arg multi_robot_name)"/>
   </include>
-  <include file="$(find turtlebot3_bringup)/launch/turtlebot3_lidar.launch">
+  <include file="$(find turtlebot3_bringup)/launch/rplidar.launch">
     <arg name="set_frame_id" value="$(arg set_lidar_frame_id)"/>
   </include>
 
