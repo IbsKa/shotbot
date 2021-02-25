@@ -1,0 +1,24 @@
+Problembehandlung:
+
+1. das bringup hängt beim OpenCr board
+-> Master neu starten (roscore killen)
+
+2. Keine Lidar-Daten in rviz zu sehen
+-> Prüfen, ob Nachrichten über das Topic gesendet werden (anderes als 0) mit rostopic echo scan_filtered
+-> Wenn nein: Firewall-Einstellungen ändern (shotbot und remotePC) 
+-> Wenn nein: Prüfen ob USB-Port der richtige ist oder geändert wurde mit ls /dev/ttyUSB*
+-> Wenn es der falsche ist, ist in der Regel der Strombedarf des Lidars zu hoch
+
+3. Allgemeine Probleme
+-> Schauen, ob alle Frames vorhanden und miteinander verbunden sind mit rosrun tf view_frames
+-> Im aktuellen Ordner wurde eine pdf angelegt (evince frames.pdf)
+
+http://wiki.ros.org/tf/Debugging%20tools
+
+
+-> Überprüfen, ob alle Nodes publishen/ subscriben (rostopic list)
+-> Und ob (sinnvolle) Nachrichten gesendet werden (rostopic echo $topic)
+ 
+-> Befehl 'roswtf' gibt alle errors oder warnings aus, die aktuell vorhanden sind
+
+http://wiki.ros.org/tf/Debugging%20tools

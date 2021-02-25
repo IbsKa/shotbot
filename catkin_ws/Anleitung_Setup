@@ -1,0 +1,64 @@
+Anleitung Setup
+
+0. alias Befehle für IP-Adressen
+
+echo alias IP_ADRESSE_PC='IP_ADRESSE_PC' >> ~/.bahsrc
+echo alias IP_ADRESSE_shotbot='IP_ADRESSE_shotbot' >> ~/.bahsrc
+(Heim_Netzwerk Shotbot_IP: 172.16.11.125) >> ~/.bahsrc
+echo alias YOUR_PC_='NAME_OF_YOUR_PC' >> ~/.bahsrc
+
+1. ros installieren
+
+	- sudo apt-get update
+	- sudo apt-get upgrade
+	- wget https://raw.githubusercontent.com/ROBOTIS-GIT/robotis_tools/master/install_ros_melodic.sh
+	- chmod 755 ./install_ros_melodic.sh
+	- bash ./install_ros_melodic.sh
+
+2. IP-Adressen in den /etc/hosts hinterlegen 
+
+$ echo $IP_ADRESSE_PC $YOUR_PC >> /etc/hosts 
+$ echo $IP_ADRESSE_shotbot shotbot >> /etc/hosts
+
+3. siehe 2. über ssh beim shotbot
+
+4. rosdep installieren
+
+$ sudo apt-get install python-rosdep
+$ sudo rosdep init
+$ rosdep update
+$ rosdep install --from-paths src --ignore-src -r -y (installiert alle relevanten packages)
+
+5. Kompilieren
+
+$ cd ~/shotbot/catkin_ws
+$ catkin_make
+
+Info: Falls beim Kompilieren einzelne packages fehlen sollten, über folgenden Befehl nachinstallieren oder aus github holen.
+$ sudo apt install ros-melodic-$package
+
+6. Entwicklungsumgebung setzen für PC
+
+$ echo source /home/$USER_NAME/shotbot/catkin_ws/devel/setup.bash >> ~/.bahsrc
+$ echo export ROS_MASTER_URI=http://$YOUR_PC:11311 >> ~/.bahsrc
+$ echo export ROS_HOSTNAME=§YOUR_PC >> ~/.bahsrc
+
+7. alias für gängige Befehle hinzufügen
+
+	7.1 remotePC
+$ echo alias cw='cd ~/shotbot/catkin_ws' >> ~/.bahsrc
+$ echo alias cs='cd ~/shotbot/catkin_ws/src' >> ~/.bahsrc
+$ echo alias cm='cd ~/shotbot/catkin_ws && catkin_make' >> ~/.bahsrc
+$ echo alias slam='roslaunch turtlebot3_slam turtlebot3_slam.launch' >> ~/.bahsrc
+$ echo alias navigation='roslaunch turtlebot3_navigation turtlebot3_navigation.launch' >> ~/.bahsrc
+$ echo alias rviz='rosrun rviz rviz' >> ~/.bahsrc
+
+	7.2 shotbot
+$ echo alias cw='cd ~/shotbot_raspi/catkin_ws' >> ~/.bahsrc
+$ echo alias cs='cd ~/shotbot_raspi/catkin_ws/src' >> ~/.bahsrc
+$ echo alias cm='cd ~/shotbot_raspi/catkin_ws && catkin_make' >> ~/.bahsrc
+$ echo alias slam='roslaunch turtlebot3_slam turtlebot3_slam.launch' >> ~/.bahsrc
+$ echo alias navigation='roslaunch turtlebot3_navigation turtlebot3_navigation.launch' >> ~/.bahsrc
+$ echo alias bringup='roslaunch turtlebot3_bringup turtlebot3_robot.launch' >> ~/.bahsrc
+
+

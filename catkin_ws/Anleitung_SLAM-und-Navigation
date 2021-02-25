@@ -1,0 +1,49 @@
+Anleitung SLAM und Navigation allgemein
+
+Beachten auf welchem Rechner die Befehle erfolgen -> Bei Shotbot über ssh 
+
+1. (remotePC) Master muss IMMER laufen, ansonsten kann keine Kommunikation der einzelnen Nodes erfolgen
+
+$ roscore
+
+2. (shotbot) Roboterinterne Prozesse launchen 
+(Lidar + alle über das OpenCR gesteurten Prozesse, z.B. Ultraschall, Temperatur, Motoren,...)
+
+$ bringup
+
+3. (remotePC) SLAM oder Navigation starten 
+
+3.1 SLAM
+$ slam
+
+3.2 Navigation
+$ navigation
+
+
+
+
+---------------------------------------
+
+SLAM Parameter (gmapping) anpassen 
+
+~/shotbot/catkin_ws/src/turtlebot3/turtlebot3_slam/config/gmapping_params.yaml
+
+Übersicht der Parameter online unter:
+http://wiki.ros.org/gmapping
+
+Auswirkung ausgewählter Parameter in der Bachelor-Arbeit von Laura Slabon dargestellt
+
+---------------------------------------
+
+Navigation Parameter anpassen 
+
+~/shotbot/catkin_ws/src/turtlebot3/turtlebot3_navigation/param/costmap_common_param_waffle_pi.yaml
+~/shotbot/catkin_ws/src/turtlebot3/turtlebot3_navigation/param/dwa_local_planner_params_waffle_pi.yaml
+
+Informationen zu Costmaps in ROS unter:
+http://wiki.ros.org/costmap_2d#Inflation
+
+Allgemeine Erläuterungen zu den Parametern der Navigation unter:
+http://wiki.ros.org/navigation/Tutorials/Navigation%20Tuning%20Guide
+http://kaiyuzheng.me/documents/navguide.pdf
+
