@@ -21,7 +21,7 @@ const openOrders = []
 
 //init Express Router
 var router = express.Router();
-var port = process.env.PORT || 8080;
+var port = process.env.VUE_APP_BACKEND_PORT || 8080;
 
 //return static page with websocket client
 app.get('/', function(req, res) {
