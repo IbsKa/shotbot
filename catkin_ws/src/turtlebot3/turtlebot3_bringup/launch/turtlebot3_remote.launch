@@ -6,10 +6,11 @@
     <arg name="model" value="$(arg model)" />
   </include>
 
-  <node pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" name="joint_state_publisher_gui">
+<!--  <node pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" name="joint_state_publisher_gui">
     <param name="use_gui" value="true"/>
     <param name="rate" value="50"/>
   </node>
+-->
 
 <!--
   <node pkg="laser_filters" type="scan_to_scan_filter_chain" name="laser_filter">

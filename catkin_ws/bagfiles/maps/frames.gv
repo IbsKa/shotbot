@@ -1,0 +1,15 @@
+digraph G {
+"base_footprint" -> "base_link"[label="Broadcaster: /play_1613562485304274547\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1613562694.172 sec old)\nBuffer length: 0.000 sec\n"];
+"odom" -> "base_footprint"[label="Broadcaster: /play_1613562485304274547\nAverage rate: 17.690 Hz\nMost recent transform: 1613476226.649 ( 86467.523 sec old)\nBuffer length: 4.862 sec\n"];
+"base_link" -> "imu_link"[label="Broadcaster: /play_1613562485304274547\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1613562694.172 sec old)\nBuffer length: 0.000 sec\n"];
+"base_link" -> "base_scan"[label="Broadcaster: /play_1613562485304274547\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1613562694.172 sec old)\nBuffer length: 0.000 sec\n"];
+"base_link" -> "sonar_bottom_left_link"[label="Broadcaster: /play_1613562485304274547\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1613562694.172 sec old)\nBuffer length: 0.000 sec\n"];
+"base_link" -> "sonar_bottom_right_link"[label="Broadcaster: /play_1613562485304274547\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1613562694.172 sec old)\nBuffer length: 0.000 sec\n"];
+"map" -> "odom"[label="Broadcaster: /turtlebot3_slam_gmapping\nAverage rate: 20.204 Hz\nMost recent transform: 1613562694.209 ( -0.037 sec old)\nBuffer length: 4.900 sec\n"];
+"base_link" -> "wheel_left_link"[label="Broadcaster: /play_1613562485304274547\nAverage rate: 17.484 Hz\nMost recent transform: 1613476226.649 ( 86467.523 sec old)\nBuffer length: 4.862 sec\n"];
+"base_link" -> "wheel_right_link"[label="Broadcaster: /play_1613562485304274547\nAverage rate: 17.484 Hz\nMost recent transform: 1613476226.649 ( 86467.523 sec old)\nBuffer length: 4.862 sec\n"];
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 1613562694.172"[ shape=plaintext ] ;
+ }->"map";
+}
