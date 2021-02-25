@@ -54,4 +54,4 @@ CATKIN_IGNORE
 backend/node_modules
 
 # frontend
-backend/node_modules
+frontend/node_modules
