@@ -49,3 +49,9 @@ qtcreator-*
 
 # Catkin custom files
 CATKIN_IGNORE
+
+# backend
+backend/node_modules
+
+# frontend
+backend/node_modules
