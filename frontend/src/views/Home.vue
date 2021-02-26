@@ -1,16 +1,15 @@
 <template>
   <div>
-    <div class="lead my-4">Wohin soll's gehen?</div>
-    <div v-for="place in places" v-bind:key="place" class="w-100">
-      <b-link :to="{ name: 'New', params: { place: place } }">
-        <b-button
-          style="width: 85%"
-          class="m-3 jaegerbg"
-          variant="light"
-          size="lg"
-          >{{ place }}
-        </b-button>
-      </b-link>
+    <div v-if="isEmpty" class="lead my-4">Scheinbar war der Durst sehr groß, der Shotbot muss nämlich nachgefüllt werden 😋</div>
+    <div v-else>
+      <div class="lead my-4">Wohin soll's gehen?</div>
+      <div v-for="place in places" v-bind:key="place" class="w-100">
+        <b-link :to="{ name: 'New', params: { place: place } }">
+          <b-button style="width: 85%" class="m-3 jaegerbg" variant="light" size="lg">
+            {{ place }}
+          </b-button>
+        </b-link>
+      </div>
     </div>
     <div class="mt-5">
       Alle offenen Bestellungen kannst du
@@ -20,13 +19,20 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
-  name: "Home",
+  name: 'Home',
+  computed: {
+    ...mapGetters(['remainingShots']),
+    isEmpty() {
+      return this.remainingShots.normal === 0 && this.remainingShots.spicy === 0 && this.remainingShots.coldBrew === 0
+    }
+  },
   data: function () {
     return {
-      places: ["Bar", "Bibliothek", "Küche", "Speisesaal", "Spiegelkabinett"],
-    };
+      places: ['Bar', 'Bibliothek', 'Küche', 'Speisesaal', 'Spiegelkabinett']
+    }
   },
-  components: {},
-};
+  components: {}
+}
 </script>
