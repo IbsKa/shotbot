@@ -1,20 +1,36 @@
 <template>
   <div id="app" class="p-3">
+    <backend-connection></backend-connection>
     <b-link to="/" class="headline">Jägermeister Shotbot</b-link>
-    <bot-status />
-    <transition name="slide-fade" mode="out-in">
-      <router-view />
-    </transition>
+    <div v-if="connectionState === 'connected'">
+      <bot-status />
+      <transition name="slide-fade" mode="out-in">
+        <router-view />
+      </transition>
+    </div>
+    <div v-else>
+      <!-- <img :src="require('./assets/hirsch.png')" alt="" /> -->
+      <b-img :src="require('./assets/hirsch.png')" fluid alt="Jägermeister Shotbot" class="mt-5 fading" />
+      <div class="mt-5">
+        <i>Verbindung wird hergestellt...</i>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 import BotStatus from './components/BotStatus'
+import BackendConnection from './components/BackendConnection'
+import { mapGetters } from 'vuex'
 export default {
   components: {
-    BotStatus
+    BotStatus,
+    BackendConnection
   },
   created() {
     document.title = 'Shotbot'
+  },
+  computed: {
+    ...mapGetters(['connectionState', 'remainingShots'])
   }
 }
 </script>
@@ -86,6 +102,20 @@ a {
   border-color: rgb(221, 90, 18) !important;
   color: black !important;
   font-weight: 900 !important;
+}
+.fading {
+  animation: fadeinout 3s linear infinite;
+}
+@keyframes fadeinout {
+  0% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.15;
+  }
 }
 
 .fade-enter-active,

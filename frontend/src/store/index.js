@@ -6,7 +6,9 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     remainingShots: {},
-    openOrders: []
+    openOrders: [],
+    connectionState: "not connected",
+    currentJob: ""
   },
   mutations: {
     setRemainingShots(state, remainingShots) {
@@ -14,6 +16,12 @@ export default new Vuex.Store({
     },
     setOpenOrders(state, openOrders) {
       state.openOrders = openOrders;
+    },
+    setConnectionState(state, connectionState) {
+      state.connectionState = connectionState;
+    },
+    setCurrentJob(state, job) {
+      state.currentJob = job;
     }
   },
   getters: {
@@ -22,6 +30,12 @@ export default new Vuex.Store({
     },
     openOrders(state) {
       return state.openOrders;
+    },
+    connectionState(state) {
+      return state.connectionState;
+    },
+    currentJob(state) {
+      return state.currentJob;
     }
   },
   actions: {

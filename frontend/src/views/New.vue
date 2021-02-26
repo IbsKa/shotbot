@@ -3,19 +3,19 @@
     <div class="lead my-5">Alles klar, auf geht's in Richtung {{ place }}! Was darf es sein?</div>
     <div class="my-5 mx-3">
       <label for="normal-range"
-        ><b>Normal: {{ normal }}</b></label
+        ><b>Normal: {{ remainingShots.normal > 0 ? normal : 'Ausverkauft' }}</b></label
       >
       <b-form-input class="custom-range" id="normal-range" v-model="normal" type="range" min="0" :max="Math.min(remainingShots.normal, 3)"></b-form-input>
     </div>
     <div class="my-5 mx-3">
       <label for="spicy-range"
-        ><b>Scharf: {{ spicy }}</b></label
+        ><b>Scharf: {{ remainingShots.spicy > 0 ? spicy : 'Ausverkauft' }}</b></label
       >
       <b-form-input class="custom-range" id="spicy-range" v-model="spicy" type="range" min="0" :max="Math.min(remainingShots.spicy, 3)"></b-form-input>
     </div>
     <div class="my-5 mx-3">
       <label for="coldbrew-range"
-        ><b>Cold Brew: {{ coldBrew }}</b></label
+        ><b>Cold Brew: {{ remainingShots.coldBrew > 0 ? coldBrew : 'Ausverkauft' }}</b></label
       >
       <b-form-input class="custom-range" id="coldbrew-range" v-model="coldBrew" type="range" min="0" :max="Math.min(remainingShots.coldBrew, 3)"></b-form-input>
     </div>
@@ -46,7 +46,7 @@ export default {
     async newOrder() {
       try {
         this.isOrdered = true
-        const res = await axios.post(`http://${process.env.VUE_APP_SHOTBOT_IP}:${process.env.VUE_APP_BACKEND_PORT}/new`, {
+        const res = await axios.post(`http://${process.env.VUE_APP_SHOTBOT_IP}:${process.env.VUE_APP_BACKEND_PORT}/orders`, {
           place: this.place,
           shots: { normal: this.normal, spicy: this.spicy, coldBrew: this.coldBrew }
         })
