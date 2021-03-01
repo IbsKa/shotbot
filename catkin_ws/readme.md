@@ -1,5 +1,3 @@
-# ROS
-
 ## Setup
 
 1. alias Befehle für IP-Adressen
@@ -156,23 +154,3 @@ Dafür das OpenCr über USB mit dem Computer verbinden.
    - Überprüfen, ob alle Nodes publishen/ subscriben (rostopic list)
    - Und ob (sinnvolle) Nachrichten gesendet werden (rostopic echo $topic)
    - Befehl 'roswtf' gibt alle errors oder warnings aus, die aktuell vorhanden sind
-
-# Backend/Frontend für Bestellung
-### Setup
-
-Bei Neuinstallation sollte sichergestellt sein, dass sowohl die docker engine als auch docker-compose installiert wurden.
-
-Die Container für backend und frontend werden mit docker-compose gestartet. `--build` kann als Argument hinzugefügt werden wenn es Änderungen im Code gab
-``` shell
-docker-compose up -d
-```
-
-Jegliche Bestelldaten existieren ausschließlich im Speicher, weswegen sie bei einem Neustart verloren gehen würden.
-
-### Configuration
-
-Jegliche Konfiguration wird über die .env-Datei im Root-Verzeichnis vorgenommen:
-
-- VUE_APP_SHOTBOT_IP: The IP or hostname where the backend is running
-- VUE_APP_BACKEND_PORT: The port on which the backend listens for requests
-- VUE_APP_MAX_SHOTS: The number of shots after all flasks have been refilled
