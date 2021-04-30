@@ -114,6 +114,7 @@ navigation
 Auswirkung ausgewählter Parameter in der Bachelor-Arbeit von Laura Slabon dargestellt.
 
 #### Navigation Parameter anpassen 
+Gschwindigkeit und Beschleuinigung kann hier angepasst werden
 
 ``` shell
 ~/shotbot/catkin_ws/src/turtlebot3/turtlebot3_navigation/param/costmap_common_param_waffle_pi.yaml
