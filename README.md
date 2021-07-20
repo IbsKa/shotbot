@@ -51,30 +51,30 @@ Falls beim Kompilieren einzelne packages fehlen sollten, über folgenden Befehl 
 6. Entwicklungsumgebung setzen für PC
 
 ``` shell
-echo source /home/$USER_NAME/shotbot/catkin_ws/devel/setup.bash >> ~/.bahsrc
-echo export ROS_MASTER_URI=http://$YOUR_PC:11311 >> ~/.bahsrc
-echo export ROS_HOSTNAME=§YOUR_PC >> ~/.bahsrc
+echo source /home/$USER_NAME/shotbot/catkin_ws/devel/setup.bash >> ~/.bashrc
+echo export ROS_MASTER_URI=http://$YOUR_PC:11311 >> ~/.bashrc
+echo export ROS_HOSTNAME=§YOUR_PC >> ~/.bashrc
 ```
 
 7. alias für gängige Befehle hinzufügen
 
 	7.1 remotePC
 ``` shell
-echo alias cw='cd ~/shotbot/catkin_ws' >> ~/.bahsrc
-echo alias cs='cd ~/shotbot/catkin_ws/src' >> ~/.bahsrc
-echo alias cm='cd ~/shotbot/catkin_ws && catkin_make' >> ~/.bahsrc
-echo alias slam='roslaunch turtlebot3_slam turtlebot3_slam.launch' >> ~/.bahsrc
-echo alias navigation='roslaunch turtlebot3_navigation turtlebot3_navigation.launch' >> ~/.bahsrc
-echo alias rviz='rosrun rviz rviz' >> ~/.bahsrc
+echo alias cw='cd ~/shotbot/catkin_ws' >> ~/.bashrc
+echo alias cs='cd ~/shotbot/catkin_ws/src' >> ~/.bashrc
+echo alias cm='cd ~/shotbot/catkin_ws && catkin_make' >> ~/.bashrc
+echo alias slam='roslaunch turtlebot3_slam turtlebot3_slam.launch' >> ~/.bashrc
+echo alias navigation='roslaunch turtlebot3_navigation turtlebot3_navigation.launch' >> ~/.bashrc
+echo alias rviz='rosrun rviz rviz' >> ~/.bashrc
 ```
 	7.2 shotbot
 ``` shell
-echo alias cw='cd ~/shotbot_raspi/catkin_ws' >> ~/.bahsrc
-echo alias cs='cd ~/shotbot_raspi/catkin_ws/src' >> ~/.bahsrc
-echo alias cm='cd ~/shotbot_raspi/catkin_ws && catkin_make' >> ~/.bahsrc
-echo alias slam='roslaunch turtlebot3_slam turtlebot3_slam.launch' >> ~/.bahsrc
-echo alias navigation='roslaunch turtlebot3_navigation turtlebot3_navigation.launch' >> ~/.bahsrc
-echo alias bringup='roslaunch turtlebot3_bringup turtlebot3_robot.launch' >> ~/.bahsrc
+echo alias cw='cd ~/shotbot_raspi/catkin_ws' >> ~/.bashrc
+echo alias cs='cd ~/shotbot_raspi/catkin_ws/src' >> ~/.bashrc
+echo alias cm='cd ~/shotbot_raspi/catkin_ws && catkin_make' >> ~/.bashrc
+echo alias slam='roslaunch turtlebot3_slam turtlebot3_slam.launch' >> ~/.bashrc
+echo alias navigation='roslaunch turtlebot3_navigation turtlebot3_navigation.launch' >> ~/.bashrc
+echo alias bringup='roslaunch turtlebot3_bringup turtlebot3_robot.launch' >> ~/.bashrc
 ```
 
 ## Navigation
