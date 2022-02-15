@@ -42,7 +42,7 @@ export class Robot {
         setTimeout(() => {
             console.log('reached position')
             this.#state = ROBOTSTATE.Completed;
-        }, 5_000);
+        }, 15_000);
     }
 
     Pour(whatDrink) {
@@ -62,7 +62,7 @@ export class Robot {
         setTimeout(() => {
             console.log('drink poured')
             this.#state = ROBOTSTATE.Completed;
-        }, 500_000);
+        }, 10_000);
     }
 
     GoHome() {
