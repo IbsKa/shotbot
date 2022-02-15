@@ -28,8 +28,9 @@ var remainingShots = new Shots(shotCapacity,shotCapacity,shotCapacity);
 
 var orderQueue = []
 
+// configure timeouts (in seconds)
 const TIMEOUT_MOVEMENT = 5 * 60;
-const TIMEOUT_POURING = 3 * 60;
+const TIMEOUT_POURING = 30; // one drink!
 
 
 //init Express Router
