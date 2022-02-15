@@ -12,22 +12,22 @@
         <tr>
           <td>Normal</td>
           <td>
-            <span v-for="index in parseInt(remainingShots.normal)" v-bind:key="index">|</span>
-            <span v-for="index in new Array(openOrders.reduce((acc, order) => parseInt(order.shots.normal) + acc, 0))" v-bind:key="index" style="color: rgb(221, 90, 18)">|</span>
+            <span v-for="index in parseInt(remainingShots.Normal)" v-bind:key="index">|</span>
+            <span v-for="index in new Array(openOrders.reduce((acc, order) => parseInt(order.Shots.Normal) + acc, 0))" v-bind:key="index" style="color: rgb(221, 90, 18)">|</span>
           </td>
         </tr>
         <tr>
           <td>Scharf</td>
           <td>
-            <span v-for="index in parseInt(remainingShots.spicy)" v-bind:key="index">|</span>
-            <span v-for="index in new Array(openOrders.reduce((acc, order) => parseInt(order.shots.spicy) + acc, 0))" v-bind:key="index" style="color: rgb(221, 90, 18)">|</span>
+            <span v-for="index in parseInt(remainingShots.Spicy)" v-bind:key="index">|</span>
+            <span v-for="index in new Array(openOrders.reduce((acc, order) => parseInt(order.Shots.Spicy) + acc, 0))" v-bind:key="index" style="color: rgb(221, 90, 18)">|</span>
           </td>
         </tr>
         <tr>
           <td>Cold Brew</td>
           <td>
-            <span v-for="index in parseInt(remainingShots.coldBrew)" v-bind:key="index">|</span>
-            <span v-for="index in new Array(openOrders.reduce((acc, order) => parseInt(order.shots.coldBrew) + acc, 0))" v-bind:key="index" style="color: rgb(221, 90, 18)">|</span>
+            <span v-for="index in parseInt(remainingShots.ColdBrew)" v-bind:key="index">|</span>
+            <span v-for="index in new Array(openOrders.reduce((acc, order) => parseInt(order.Shots.ColdBrew) + acc, 0))" v-bind:key="index" style="color: rgb(221, 90, 18)">|</span>
           </td>
         </tr>
       </table>
