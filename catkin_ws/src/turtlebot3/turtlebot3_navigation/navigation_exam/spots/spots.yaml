@@ -1,0 +1,21 @@
+point1:
+    position:
+      x: 0.503
+      y: -3.657
+      z: 0.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: -0.702
+      w: 0.712
+
+point2:
+    position:
+      x: -1.766
+      y: -1.562
+      z: 0.0
+    orientation:
+      x: 0.0
+      y: 0.0
+      z: 0.907
+      w: 0.420

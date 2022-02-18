@@ -2,9 +2,11 @@ global_costmap:
   global_frame: "map"
   robot_base_frame: "base_footprint"
 
+  static_map: true
+
   update_frequency: 10.0
-  publish_frequency: 10.0
-  always_send_full_costmap: true
+  publish_frequency: 5.0
+  always_send_full_costmap: false
   transform_tolerance: 0.5
 
   resolution: 0.05
@@ -13,5 +15,5 @@ global_costmap:
 
   plugins:
     - {name: static_layer,        type: "costmap_2d::StaticLayer"}
-    #- {name: obstacle_layer,      type: "costmap_2d::VoxelLayer"}
+    - {name: obstacle_layer,      type: "costmap_2d::VoxelLayer"}
     - {name: inflation_layer,     type: "costmap_2d::InflationLayer"}

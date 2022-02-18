@@ -6,20 +6,21 @@
     <arg name="model" value="$(arg model)" />
   </include>
 
-<!--  <node pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" name="joint_state_publisher_gui">
+  <?ignore
+  <node pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" name="joint_state_publisher_gui">
     <param name="use_gui" value="true"/>
-    <param name="rate" value="50"/>
+    <param name="rate" value="30"/>
   </node>
--->
+  ?>
 
-<!--
+  <?ignore
   <node pkg="laser_filters" type="scan_to_scan_filter_chain" name="laser_filter">
     <rosparam command="load" file="$(find laser_filters)/shotbot_laser_filter/shotbot_laser_config.yaml"/>
   </node>
--->
+  ?>
 
   <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
-    <param name="publish_frequency" type="double" value="50.0" />
+    <param name="publish_frequency" type="double" value="30.0" />
     <param name="tf_prefix" value="$(arg multi_robot_name)"/>
   </node>
 </launch>

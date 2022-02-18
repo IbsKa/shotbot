@@ -1,0 +1,17 @@
+<launch>
+
+  <arg name="scan_topic" default="scan_filtered" />
+  <arg name="map_file" default="$(find turtlebot3_navigation)/maps/buero_ka.yaml"/>
+
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+
+  <?ignore
+  <node pkg="amcl" type="amcl" name="amcl">
+    <rosparam file="$(find turtlebot3_navigation)/navigation_exam/params/localization.yaml" command="load" />
+    <remap from="scan" to="$(arg scan_topic)"/>
+  </node>
+  ?>
+
+  <include file="$(find turtlebot3_navigation)/launch/amcl.launch"/>
+
+</launch>

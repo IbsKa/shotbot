@@ -1,0 +1,9 @@
+footprint: [[-0.65, -0.30], [-0.65, 0.30], [0.05, 0.30], [0.05, -0.30]]
+
+sonar_layer:
+  enabled:              false
+  topics: ["/move_base/local_costmap/sonar_layer/sonar_bottom_right","/move_base/local_costmap/sonar_layer/sonar_bottom_left"]
+  clear_on_max_reading: true
+
+
+  

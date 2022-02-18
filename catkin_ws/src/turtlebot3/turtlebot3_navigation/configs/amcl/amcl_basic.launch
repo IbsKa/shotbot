@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<launch>
+
+  <arg name="env_map" default="$(find turtlebot3_navigation)/maps/ibs_floor_2.yaml" />
+
+  <!-- MAP SERVER -->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg env_map)">
+  </node>
+
+    <!-- AMCL Node -->
+  <node pkg="amcl" type="amcl" name="amcl">
+
+    <rosparam file="$(find turtlebot3_navigation)/configs/amcl/amcl_basic.yaml" command="load" />
+
+ </node>
+
+</launch>

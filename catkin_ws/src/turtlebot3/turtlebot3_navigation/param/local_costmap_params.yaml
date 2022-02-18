@@ -2,8 +2,8 @@ local_costmap:
   global_frame: "odom"
   robot_base_frame: "base_footprint"
 
-  update_frequency: 5.0
-  publish_frequency: 10.0
+  update_frequency: 10.0
+  publish_frequency: 5.0
   always_send_full_costmap: true
   transform_tolerance: 0.5
 
@@ -12,7 +12,9 @@ local_costmap:
   origin_x: 0.0
   origin_y: 0.0
 
+  inflation_radius: 0.2
+
   plugins:
    - {name: obstacle_layer,      type: "costmap_2d::VoxelLayer"}
-   - {name: sonar_layer,         type: "range_sensor_layer::RangeSensorLayer"}
+   #- {name: sonar_layer,         type: "range_sensor_layer::RangeSensorLayer"}
    - {name: inflation_layer,     type: "costmap_2d::InflationLayer"}

@@ -1,0 +1,17 @@
+#!/usr/bin/env python
+__author__ = 'Laura Slabon'
+	
+import rospy
+from std_srvs.srv import Empty
+
+
+
+rospy.init_node('move_base')
+rospy.wait_for_service('clear_costmaps')
+try:
+	ClearCostmaps = rospy.ServiceProxy('clear_costmaps', Empty)
+	clear_costmaps = ClearCostmaps()
+except rospy.ServiceException as e:
+	print("Service call failed: %s"%e)
+		
+
