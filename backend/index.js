@@ -1,7 +1,17 @@
-const SocketServer = require('ws').Server;
-var express = require('express');
-var path = require('path');
-var cors = require('cors')
+import { Order, ORDERSTATE, Shots } from './model/order/order.js'
+import { Robot, ROBOTSTATE } from './model/robot/robot.js'
+
+import ws from 'ws'
+import express from 'express'
+import path from 'path'
+import cors from 'cors'
+import { syncBuiltinESMExports } from 'module'
+
+const SocketServer = ws.Server;
+
+const ShotBot = new Robot();
+
+
 var connectedUsers = [];
 
 //init Express
@@ -9,18 +19,23 @@ var app = express();
 app.use(express.json());
 app.use(cors());
 
+
+
 // use this to adjust the maximum number of beverages
 // that can be ordered per berageType
 const shotCapacity = process.env.VUE_APP_MAX_SHOTS || 30;
-var remainingShots = {
-    coldBrew: shotCapacity,
-    normal: shotCapacity,
-    spicy: shotCapacity
-}
-var openOrders = []
+var remainingShots = new Shots(shotCapacity,shotCapacity,shotCapacity);
+
+var orderQueue = []
+
+// configure timeouts (in seconds)
+const TIMEOUT_MOVEMENT = 5 * 60;
+const TIMEOUT_POURING = 30; // one drink!
+
 
 //init Express Router
 const port = process.env.VUE_APP_BACKEND_PORT || 8080;
+
 
 //return static page with websocket client
 app.get('/', function(req, res) {
@@ -31,7 +46,8 @@ app.get('/', function(req, res) {
 // endpoint for ordering new shots
 app.post('/orders', (req, res) => {
   console.log("new order req", req.body);
-  openOrders.push(req.body);
+  orderQueue.push(new Order(req.body.location, parseInt(req.body.shots.normal), parseInt(req.body.shots.spicy), parseInt(req.body.shots.coldBrew)));
+  console.log(orderQueue)
   Object.keys(req.body.shots).forEach(s => {
     remainingShots[s] -= parseInt(req.body.shots[s])
   })
@@ -78,7 +94,7 @@ app.post('/remaining', (req, res) => {
 })
 
 // start the server
-var server = app.listen(port, function () {
+let server = app.listen(port, function () {
     console.log('node.js static server listening on port: ' + port + ", with websockets listener")
 })
 
@@ -87,28 +103,103 @@ const wss = new SocketServer({ server });
 
 // init Websocket ws and handle incoming connect requests
 wss.on('connection', function connection(ws) {
-    console.log("connection ...");
+  console.log("connection ...");
 
-    // 
-    ws.on('message', function incoming(message) {
-        console.log('received: %s', message);
-        connectedUsers.push(message);
-    });
+  // 
+  ws.on('message', function incoming(message) {
+      console.log('received: %s', message);
+      connectedUsers.push(message);
+  });
 
-    ws.on('close', () => {
-      console.log('client closed');
-    })
+  ws.on('close', () => {
+    console.log('client closed');
+  })
 
-    //var statusMessage = {orders: openOrders, job: openOrders.length === 0 ? null : openOrders[0].place, remainingShots}
-    ws.send(JSON.stringify(statusMessage()));
+  //var statusMessage = {orders: openOrders, job: openOrders.length === 0 ? null : openOrders[0].place, remainingShots}
+  ws.send(JSON.stringify(statusMessage()));
 });
 
-statusMessage = () => {
-  return {orders: openOrders, job: openOrders.length === 0 ? null : openOrders[0].place, remainingShots}
+const statusMessage = () => {
+  return {orders: orderQueue, job: orderQueue.length === 0 ? null : orderQueue[0].Location, remainingShots}
 }
 
-updateClients = () => {
-    wss.clients.forEach(client => {
-    client.send(JSON.stringify(statusMessage()))
-  })
+const updateClients = () => {
+  wss.clients.forEach(client => {
+  client.send(JSON.stringify(statusMessage()))
+})}
+
+while (true) {
+  // sleep at the beginning to loop-reruns can wait without further code
+  await new Promise(r => setTimeout(r, 1_000));
+
+  //console.log("OrderList: ", orderQueue);
+  //console.log("Robot: " + ShotBot.Status)
+
+  if (orderQueue.length === 0) {
+    console.log('no orders -> sleeping')
+    continue
+  }
+
+  // pre-sort by date then get the first entry not yet completed
+  let curOrder = orderQueue.sort(Order.compare).filter(o => o.Status !== ORDERSTATE.Completed)[0];
+
+  if (curOrder === undefined) {
+    console.log('all orders completed -> sleeping')
+    continue
+  }
+
+  // first step -> go there
+  if (curOrder.Status === ORDERSTATE.Queued && ShotBot.IsIdle()) {
+    ShotBot.GoTo(curOrder.Location);
+    curOrder.Status = ORDERSTATE.InTransit;
+    continue
+  }
+
+  // intermediate step: await arrival
+  if (curOrder.Status === ORDERSTATE.InTransit && ShotBot.Status === ROBOTSTATE.Moving) {
+    console.log('robot in transit')
+    // check timeout
+    if ((Date.now() - ShotBot.LastAction) > TIMEOUT_MOVEMENT * 1_000) {
+      console.log('timeout during robot in motion')
+      ShotBot.GoHome(); // try to abort and return home
+    }
+    continue
+  }
+
+  // we arrived at position -> continue with pouring
+  if (curOrder.Status === ORDERSTATE.InTransit && ShotBot.Status === ROBOTSTATE.Completed) {
+    console.log('robot arrived')
+    curOrder.Status = ORDERSTATE.Pouring;
+    // robot will be set by first pour
+  }
+
+  // currently pouring a drink
+  if (curOrder.Status === ORDERSTATE.Pouring && ShotBot.Status === ROBOTSTATE.Pouring) {
+    console.log('robot serving drinks')
+    // check timeout
+    if ((Date.now() - ShotBot.LastAction) > TIMEOUT_POURING * 1_000) {
+      console.log('timeout during serving drinks')
+      ShotBot.GoHome(); // try to abort and return home
+    }
+    continue
+  }
+
+  // pour a drink
+  if (curOrder.Status === ORDERSTATE.Pouring && ShotBot.Status === ROBOTSTATE.Completed) {
+    console.log('triggering new pour for order:', curOrder)
+    let nextShot = Shots.GetNextShot(curOrder.Shots, ShotBot.CurrentRound)
+    console.log(`next shot will be ${nextShot}`)
+    if (nextShot === "") {
+      console.log('all shots for this order served')
+      curOrder.Status = ORDERSTATE.Completed;
+      console.log('TODO: what to do with robot')
+      continue;
+    }
+
+    ShotBot.Pour(nextShot);
+    continue;
+  }
+
+  // this is the end of the loop, if we run here, no actions matched above
+  console.log('well, this should never happen - no condition matched')
 }

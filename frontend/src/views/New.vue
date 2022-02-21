@@ -3,21 +3,21 @@
     <div class="lead my-5">Alles klar, auf geht's in Richtung {{ place }}! Was darf es sein?</div>
     <div class="my-5 mx-3">
       <label for="normal-range"
-        ><b>Normal: {{ remainingShots.normal > 0 ? normal : 'Ausverkauft' }}</b></label
+        ><b>Normal: {{ remainingShots.Normal > 0 ? normal : 'Ausverkauft' }}</b></label
       >
-      <b-form-input class="custom-range" id="normal-range" v-model="normal" type="range" min="0" :max="Math.min(remainingShots.normal, 3)"></b-form-input>
+      <b-form-input class="custom-range" id="normal-range" v-model="normal" type="range" min="0" :max="Math.min(remainingShots.Normal, 3)"></b-form-input>
     </div>
     <div class="my-5 mx-3">
       <label for="spicy-range"
-        ><b>Scharf: {{ remainingShots.spicy > 0 ? spicy : 'Ausverkauft' }}</b></label
+        ><b>Scharf: {{ remainingShots.Spicy > 0 ? spicy : 'Ausverkauft' }}</b></label
       >
-      <b-form-input class="custom-range" id="spicy-range" v-model="spicy" type="range" min="0" :max="Math.min(remainingShots.spicy, 3)"></b-form-input>
+      <b-form-input class="custom-range" id="spicy-range" v-model="spicy" type="range" min="0" :max="Math.min(remainingShots.Spicy, 3)"></b-form-input>
     </div>
     <div class="my-5 mx-3">
       <label for="coldbrew-range"
-        ><b>Cold Brew: {{ remainingShots.coldBrew > 0 ? coldBrew : 'Ausverkauft' }}</b></label
+        ><b>Cold Brew: {{ remainingShots.ColdBrew > 0 ? coldBrew : 'Ausverkauft' }}</b></label
       >
-      <b-form-input class="custom-range" id="coldbrew-range" v-model="coldBrew" type="range" min="0" :max="Math.min(remainingShots.coldBrew, 3)"></b-form-input>
+      <b-form-input class="custom-range" id="coldbrew-range" v-model="coldBrew" type="range" min="0" :max="Math.min(remainingShots.ColdBrew, 3)"></b-form-input>
     </div>
     <div class="w-100">
       <b-button block class="jaegerStrong" size="lg" :disabled="isOrdered || (normal == 0 && spicy == 0 && coldBrew == 0)" @click="newOrder">Fahr los!</b-button>
@@ -47,7 +47,7 @@ export default {
       try {
         this.isOrdered = true
         const res = await axios.post(`http://${process.env.VUE_APP_SHOTBOT_IP}:${process.env.VUE_APP_BACKEND_PORT}/orders`, {
-          place: this.place,
+          location: this.place,
           shots: { normal: this.normal, spicy: this.spicy, coldBrew: this.coldBrew }
         })
         if (res.status === 200) {
