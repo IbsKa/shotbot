@@ -9,8 +9,10 @@ project(shotbot)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
+  message_generation
+  message_runtime
   rospy
-  std_msgs
+  std_msg
 )
 
 ## System dependencies are found with CMake's conventions
@@ -70,7 +72,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate added messages and services with any dependencies listed here
 # generate_messages(
 #   DEPENDENCIES
-#   geometry_msgs#   std_msgs
+#   geometry_msgs
 # )
 
 ################################################
@@ -105,7 +107,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES shotbot
-#  CATKIN_DEPENDS geometry_msgs rospy std_msgs
+#  CATKIN_DEPENDS geometry_msgs message_generation message_runtime rospy std_msg
 #  DEPENDS system_lib
 )
 
