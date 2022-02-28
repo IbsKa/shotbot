@@ -1,0 +1,5 @@
+# request
+string target
+---
+#response
+bool destinationReached
