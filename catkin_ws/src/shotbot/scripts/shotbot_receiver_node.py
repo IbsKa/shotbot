@@ -5,12 +5,12 @@ from PositionMessage.srv import PositionMessage, PositionMessageResponse
 
 
 def receiveHandle(data):
-    rospy.loging("ShotBot Receiver: new target set: %s", data.data)
+    rospy.loginfo("ShotBot Receiver: new target set: %s", data.data)
     try:
         serviceHandler = rospy.ServiceProxy('shotbot', PositionMessage)
         response = serviceHandler(data.data)
 
-    except rospy.ServiceException as ex
+    except rospy.ServiceException as ex:
         rospy.loginfo('ShotBot Receiver: error with service: %s', ex)
 
 
