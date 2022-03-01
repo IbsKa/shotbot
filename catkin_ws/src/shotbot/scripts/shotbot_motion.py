@@ -7,15 +7,23 @@ from actionlib_msgs.msg import GoalStatus
 from move_base_msgs.msg import MoveBaseActionGoal, MoveBaseAction, MoveBaseResult, MoveBaseGoal
 import actionlib
 import time
-import os
 import rosparam
 
 
 class SendCoordinates(object):
     def __init__(self, label):
-        
+        self._success = false
+
         client = actionlib.SimpleActionClient('/move_base', MoveBaseAction)
         rate = rospy.Rate(1)
+
+        bla = 10
+        while bla > 0:
+            bla--
+
+        self._success = true
+        print('FAKE: successfuly reached point')
+        self.shutdownhook()
 
         goal=MoveBaseGoal()
         goal_tmp = Pose()
@@ -57,6 +65,9 @@ class SendCoordinates(object):
     def callback(self, data):
         return 
 
+    @property
+    def success(self):
+        return(self._success)
 
 if __name__ == "__main__":
     rospy.init_node('shotbot_motion_node') 
