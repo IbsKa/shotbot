@@ -19,7 +19,7 @@ class SendCoordinates(object):
 
         bla = 10
         while bla > 0:
-            bla--
+            bla -= 1
 
         self._success = true
         print('FAKE: successfuly reached point')
