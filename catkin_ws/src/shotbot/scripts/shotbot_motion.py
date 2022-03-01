@@ -12,7 +12,7 @@ import rosparam
 
 class SendCoordinates(object):
     def __init__(self, label):
-        self._success = false
+        self._success = False
 
         client = actionlib.SimpleActionClient('/move_base', MoveBaseAction)
         rate = rospy.Rate(1)
@@ -21,7 +21,7 @@ class SendCoordinates(object):
         while bla > 0:
             bla -= 1
 
-        self._success = true
+        self._success = True
         print('FAKE: successfuly reached point')
         self.shutdownhook()
 
@@ -54,6 +54,7 @@ class SendCoordinates(object):
             #print result
             if result==3:
                 print('successfuly reached point')
+                self._success = True
                 self.shutdownhook()
                 
             
