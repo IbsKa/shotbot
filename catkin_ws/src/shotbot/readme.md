@@ -15,3 +15,11 @@ This node listens to the ROS-topic `shotbot_gotoTarget`. The backend will publis
 ### `shotbot_service_node`
 This node starts up the service and waits for incoming calls.
 Once a new target is sent to the service, it will trigger movement and compare the bot's current position to the target. As soon as target is reached, the service returns true.
+
+
+## Config
+The path to the `locations.yaml` is hard-coded and might need adjustment.
+See file `shotbot/scripts/shotbot_service_node.py` method `shotbotUploadLocations`
+
+
+
