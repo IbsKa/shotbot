@@ -20,6 +20,7 @@ class SendCoordinates(object):
         bla = 10
         while bla > 0:
             bla -= 1
+            rate.sleep()
 
         self._success = True
         print('FAKE: successfuly reached point')
