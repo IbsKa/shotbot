@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 import rospy
+import os
+import rosparam
 from shotbot.srv import PositionMessage, PositionMessageResponse
 from shotbot_motion import SendCoordinates
 
