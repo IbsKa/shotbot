@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import rospy
 from shotbot.srv import PositionMessage, PositionMessageResponse
-from send_goals import SendCoordinates
+from shotbot_motion import SendCoordinates
 
 
 def serviceHandler(request):
@@ -30,6 +30,6 @@ def shotbotUploadLocations():
 if __name__ == '__main__':
     # init the node to communicate with other nodes
     rospy.init_node('shotbot_service')
-    rospy.loginfo("ShotBot Service: starting")
+    rospy.loginfo("ShotBot Service: node created")
     shotbotUploadLocations()
     shotbotService()
