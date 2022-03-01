@@ -15,9 +15,7 @@ def receiveHandle(data):
 
 
 def shotbotReceiver():
-    # init the node to communicate with other nodes
-    rospy.init_node('shotbot_receiver')
-    rospy.loginfo("ShotBot Receiver: starting")
+    rospy.loginfo("ShotBot Receiver: starting (waiting for service)")
     # wait for service to be constructed
     rospy.wait_for_service('shotbot')
     # subscribe to topic to listen for incoming commands
@@ -26,6 +24,9 @@ def shotbotReceiver():
     rospy.spin()
 
 if __name__ == '__main__':
+    # init the node to communicate with other nodes
+    rospy.init_node('shotbot_receiver')
+    rospy.loginfo('ShotBot Receiver: node created')
     try:
         shotbotReceiver()
     except rospy.ROSInterruptException:
