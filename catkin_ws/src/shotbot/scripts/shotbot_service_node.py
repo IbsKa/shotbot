@@ -9,7 +9,8 @@ from shotbot_motion import SendCoordinates
 def serviceHandler(request):
     # request is of type PositionMessage
     rospy.loginfo('ShotBot Service: request to move to target %s', request.target)
-    return PositionMessageResponse(SendCoordinates(request.target).success)
+    return PositionMessageResponse(True)
+#    return PositionMessageResponse(SendCoordinates(request.target).success)
 
 def shotbotService():
     rospy.loginfo("ShotBot Service: setting up service")
