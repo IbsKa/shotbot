@@ -25,6 +25,7 @@ class SendCoordinates(object):
         self._success = True
         print('FAKE: successfuly reached point')
         self.shutdownhook()
+        return
 
         goal=MoveBaseGoal()
         goal_tmp = Pose()
