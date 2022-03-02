@@ -18,7 +18,7 @@ export class Robot {
 
     // holds the shots currently being poured (compare to order to know what to pour/do next)
     #currentRound = new Shots();
-    
+
     constructor() {
         let rosNode;
 
@@ -35,9 +35,9 @@ export class Robot {
             });
             rosNode.start();
         } catch (err) {
-          console.error(msg);
+            console.error(err);
         } finally {
-          rosNode?.shutdown();
+            rosNode?.shutdown();
         }
     }
 
@@ -56,7 +56,7 @@ export class Robot {
             return;
         }
         this.#state = ROBOTSTATE.Moving;
-        this.#currentRound = new Shots(0,0,0); // reset shots poured
+        this.#currentRound = new Shots(0, 0, 0); // reset shots poured
         this.#updateLastAction();
 
         // TODO: remove testing 
@@ -76,7 +76,7 @@ export class Robot {
         this.#state = ROBOTSTATE.Pouring;
         this.#currentRound[whatDrink]++;
         // TODO: talk to robot
-        console.log('robot will pour '+whatDrink)
+        console.log('robot will pour ' + whatDrink)
         this.#updateLastAction();
 
         // TODO: remove testing 
