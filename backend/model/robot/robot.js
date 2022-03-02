@@ -1,6 +1,7 @@
 import { Shots } from "../order/order.js";
 import { RosNode } from "@foxglove/ros1";
-
+import { getEnvVar, getHostname, getNetworkInterfaces, getPid, TcpSocketNode } from "@foxglove/ros1/nodejs";
+import { HttpServerNodejs } from "@foxglove/xmlrpc/nodejs";
 
 export const ROBOTSTATE = {
     Idle: 0,        // robot bored, standing by
@@ -23,6 +24,7 @@ export class Robot {
         let rosNode;
 
         try {
+            console.log(process.env)
             console.log(getEnvVar("ROS_MASTER_URI"))
             rosNode = new RosNode({
                 name: 'shotbot_backend',
