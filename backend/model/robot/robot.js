@@ -1,4 +1,6 @@
 import { Shots } from "../order/order.js";
+import { RosNode } from "@foxglove/ros1";
+
 
 export const ROBOTSTATE = {
     Idle: 0,        // robot bored, standing by
@@ -18,6 +20,25 @@ export class Robot {
     #currentRound = new Shots();
     
     constructor() {
+        let rosNode;
+
+        try {
+            console.log(getEnvVar("ROS_MASTER_URI"))
+            rosNode = new RosNode({
+                name: 'shotbot_backend',
+                rosMasterUri: getEnvVar("ROS_MASTER_URI") ?? "http://localhost:11311/",
+                hostname: RosNode.GetRosHostname(getEnvVar, getHostname, getNetworkInterfaces),
+                pid: getPid(),
+                httpServer: new HttpServerNodejs(),
+                tcpSocketCreate: TcpSocketNode.Create,
+                log: console,
+            });
+            rosNode.start();
+        } catch (err) {
+          console.error(msg);
+        } finally {
+          rosNode?.shutdown();
+        }
     }
 
     get Status() { return this.#state; }
