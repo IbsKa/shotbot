@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import rospy
 from std_msgs.msg import String
-#from PositionMessage.srv import PositionMessage, PositionMessageResponse
+from PositionMessage.srv import PositionMessage, PositionMessageResponse
 
 
 def receiveHandle(data):
@@ -21,6 +21,7 @@ def shotbotReceiver():
     # subscribe to topic to listen for incoming commands
     rospy.Subscriber('shotbot_gotoTarget', String, receiveHandle)
     # keep "thread" running
+    rospy.loginfo("ShotBot Receiver: started and subscribed")
     rospy.spin()
 
 if __name__ == '__main__':
