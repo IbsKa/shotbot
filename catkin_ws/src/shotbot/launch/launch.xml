@@ -4,7 +4,7 @@
   <node pkg="shotbot" name="shotbot_receiver" type="shotbot_receiver_node.py" respawn="true" output="screen" />
 
   <!-- dependencies -->
-  <node pkg="navigation/move_base" name="move_base" type="move_base_node.cpp" respawn="true" output="screen" />
+  <node if="false" pkg="navigation/move_base" name="move_base" type="move_base_node.cpp" respawn="true" output="screen" />
   <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
 
 </launch>
