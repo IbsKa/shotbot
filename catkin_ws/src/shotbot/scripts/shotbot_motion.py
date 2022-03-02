@@ -17,7 +17,7 @@ class SendCoordinates(object):
         client = actionlib.SimpleActionClient('/move_base', MoveBaseAction)
         rate = rospy.Rate(1)
 
-        bla = 10
+        bla = 3
         while bla > 0:
             bla -= 1
             rate.sleep()
