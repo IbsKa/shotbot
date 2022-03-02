@@ -3,6 +3,10 @@
 ROS-Package containing everything we need for communcation between backend and ROS.  
 The communications works via `ros-bridge` a software that allows to use ROS-topics between ROS-core-system and external software (in our case nodeJS).
 
+## Dependencies
+The `shotbot`-package relies on the `navigation/move_base`-package.  
+
+
 ## Structure
 The package consists of a receiver-node and a service. There is also a file called `locations.yaml` that holds all known spots the shotbot can move to.
 
