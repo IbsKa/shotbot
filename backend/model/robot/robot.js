@@ -16,10 +16,19 @@ export class Robot {
     // when was the last time we talked to the ShotBot (for timeouts)
     #lastAction = Date.now();
 
+    #rosnode = undefined;
+
     // holds the shots currently being poured (compare to order to know what to pour/do next)
     #currentRound = new Shots();
 
     constructor() {
+    }
+
+    get Status() { return this.#state; }
+    get LastAction() { return this.#lastAction; }
+    get CurrentRound() { return this.#currentRound; }
+
+    async Init() {
         let rosNode;
 
         try {
@@ -33,17 +42,13 @@ export class Robot {
                 tcpSocketCreate: TcpSocketNode.Create,
                 log: console,
             });
-            rosNode.start();
+            await rosNode.start();
         } catch (err) {
             console.error(err);
         } finally {
             rosNode?.shutdown();
         }
     }
-
-    get Status() { return this.#state; }
-    get LastAction() { return this.#lastAction; }
-    get CurrentRound() { return this.#currentRound; }
 
     IsIdle() {
         return this.Status === ROBOTSTATE.Idle || this.Status === ROBOTSTATE.Completed
