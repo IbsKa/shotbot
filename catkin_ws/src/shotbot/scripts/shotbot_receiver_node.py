@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import rospy
 from std_msgs.msg import String
-from PositionMessage.srv import PositionMessage, PositionMessageResponse
+from shotbot.srv import PositionMessage, PositionMessageResponse
 
 
 def receiveHandle(data):
