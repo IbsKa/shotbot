@@ -7,7 +7,7 @@ from std_msgs.msg import String
 def receiveHandle(data):
     rospy.loginfo("ShotBot Receiver: new target set: %s", data.data)
     try:
-#        serviceHandler = rospy.ServiceProxy('shotbot', PositionMessage)
+        serviceHandler = rospy.ServiceProxy('shotbot', PositionMessage)
         response = serviceHandler(data.data)
 
     except rospy.ServiceException as ex:
