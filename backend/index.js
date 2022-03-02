@@ -24,7 +24,7 @@ app.use(cors());
 // use this to adjust the maximum number of beverages
 // that can be ordered per berageType
 const shotCapacity = process.env.VUE_APP_MAX_SHOTS || 30;
-var remainingShots = new Shots(shotCapacity,shotCapacity,shotCapacity);
+var remainingShots = new Shots(shotCapacity, shotCapacity, shotCapacity);
 
 var orderQueue = []
 
@@ -38,8 +38,8 @@ const port = process.env.VUE_APP_BACKEND_PORT || 8080;
 
 
 //return static page with websocket client
-app.get('/', function(req, res) {
-  res.json({status: "server is running!"})
+app.get('/', function (req, res) {
+  res.json({ status: "server is running!" })
 });
 
 
@@ -82,7 +82,7 @@ app.post('/remaining', (req, res) => {
     coldBrew: parseInt(req.body.coldBrew),
     normal: parseInt(req.body.normal),
     spicy: parseInt(req.body.spicy)
-}
+  }
 
   if (remainingShots.coldBrew === 0 && remainingShots.normal === 0 && remainingShots.spicy === 0) {
     openOrders = []
@@ -95,7 +95,7 @@ app.post('/remaining', (req, res) => {
 
 // start the server
 let server = app.listen(port, function () {
-    console.log('node.js static server listening on port: ' + port + ", with websockets listener")
+  console.log('node.js static server listening on port: ' + port + ", with websockets listener")
 })
 
 // define websocket
@@ -107,8 +107,8 @@ wss.on('connection', function connection(ws) {
 
   // 
   ws.on('message', function incoming(message) {
-      console.log('received: %s', message);
-      connectedUsers.push(message);
+    console.log('received: %s', message);
+    connectedUsers.push(message);
   });
 
   ws.on('close', () => {
@@ -120,13 +120,17 @@ wss.on('connection', function connection(ws) {
 });
 
 const statusMessage = () => {
-  return {orders: orderQueue, job: orderQueue.length === 0 ? null : orderQueue[0].Location, remainingShots}
+  return { orders: orderQueue, job: orderQueue.length === 0 ? null : orderQueue[0].Location, remainingShots }
 }
 
 const updateClients = () => {
   wss.clients.forEach(client => {
-  client.send(JSON.stringify(statusMessage()))
-})}
+    client.send(JSON.stringify(statusMessage()))
+  })
+}
+
+console.log('setting up robot')
+await ShotBot.Init()
 
 while (true) {
   // sleep at the beginning to loop-reruns can wait without further code
