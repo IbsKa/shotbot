@@ -1,0 +1,5 @@
+<launch>
+  <node pkg="shotbot" name="shotbot_service" type="shotbot_service_node.py" respawn="true" output="screen" />
+  <node pkg="shotbot" name="shotbot_receiver" type="shotbot_receiver_node.py" respawn="true" output="screen" />
+</launch>
+
