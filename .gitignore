@@ -52,10 +52,9 @@ CATKIN_IGNORE
 
 # backend
 backend/node_modules
-backend/.env
+backend/.env.local
 
 # frontend
 frontend/node_modules
-frontend/.env
+frontend/.env.local
 
-.env
