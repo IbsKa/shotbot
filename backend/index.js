@@ -1,3 +1,6 @@
+import dotenv from 'dotenv'
+dotenv.config()
+
 import { Order, ORDERSTATE, Shots } from './model/order/order.js'
 import { Robot, ROBOTSTATE } from './model/robot/robot.js'
 
