@@ -3,9 +3,9 @@ import { Shots } from "../order/order.js";
 //import { getEnvVar, getHostname, getNetworkInterfaces, getPid, TcpSocketNode } from "@foxglove/ros1/nodejs";
 //import { HttpServerNodejs } from "@foxglove/xmlrpc/nodejs";
 import { execSync } from 'child_process';
-import pkg from 'rosnodejs';
-const { rosnodejs } = pkg;
-
+/*import pkg from 'roslib';
+const ROSLIB = pkg;
+*/
 export const ROBOTSTATE = {
     Idle: 0,        // robot bored, standing by
     Moving: 2,      // moving to a location
@@ -34,10 +34,11 @@ export class Robot {
     get CurrentRound() { return this.#currentRound; }
 
     async Init() {
-        this.#rosNode = rosnodejs.initNode('/shotbot_backend');
-        this.#subscription = rosnodejs.nh.subscribe('/shotbot_gotoTarget', 'std_msgs/String', (msg) => {
-            console.log('Got msg on chatter: %j', msg);
+        /*
+        ROSLIB.Ros({
+            url : 'ws://192.168.55.238:9090'
         });
+        */
         /*
         try {
             console.log('Robot: constructing rosNode with master URI '+getEnvVar("ROS_MASTER_URI"))
