@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import rospy
-from std_msgs.msg import String
+from std_msgs.msg import String, Bool
 from shotbot.srv import PositionMessage, PositionMessageResponse
 
 
@@ -10,6 +10,8 @@ def receiveHandle(data):
         serviceHandler = rospy.ServiceProxy('shotbot', PositionMessage)
         response = serviceHandler(data.data)
         rospy.loginfo("ShotBot Receiver: got response from service: %s", response.destinationReached)
+        pub = rospy.Publisher('shotbot_targetReached', Bool, queue_size=10)
+        pub.publish(response.destinationReached)
 
     except rospy.ServiceException as ex:
         rospy.loginfo('ShotBot Receiver: error with service: %s', ex)

@@ -3,9 +3,10 @@ import { Shots } from "../order/order.js";
 //import { getEnvVar, getHostname, getNetworkInterfaces, getPid, TcpSocketNode } from "@foxglove/ros1/nodejs";
 //import { HttpServerNodejs } from "@foxglove/xmlrpc/nodejs";
 import { execSync } from 'child_process';
-/*import pkg from 'roslib';
-const ROSLIB = pkg;
-*/
+
+import pkg from './roslib.cjs';
+const { newRoslib } = pkg;
+
 export const ROBOTSTATE = {
     Idle: 0,        // robot bored, standing by
     Moving: 2,      // moving to a location
@@ -20,8 +21,8 @@ export class Robot {
     // when was the last time we talked to the ShotBot (for timeouts)
     #lastAction = Date.now();
 
-    #rosNode = undefined;
-    #subscription = undefined;
+    #ros = undefined;
+    #listener = undefined;
 
     // holds the shots currently being poured (compare to order to know what to pour/do next)
     #currentRound = new Shots();
@@ -34,43 +35,21 @@ export class Robot {
     get CurrentRound() { return this.#currentRound; }
 
     async Init() {
-        /*
-        ROSLIB.Ros({
-            url : 'ws://192.168.55.238:9090'
-        });
-        */
-        /*
         try {
-            console.log('Robot: constructing rosNode with master URI '+getEnvVar("ROS_MASTER_URI"))
-            this.#rosNode = new RosNode({
-                name: 'shotbot_backend',
-                rosMasterUri: getEnvVar("ROS_MASTER_URI") ?? "http://localhost:11311/",
-                hostname: RosNode.GetRosHostname(getEnvVar, getHostname, getNetworkInterfaces),
-                pid: getPid(),
-                httpServer: new HttpServerNodejs(),
-                tcpSocketCreate: TcpSocketNode.Create,
-                log: console,
+            this.#ros = newRoslib({
+                url: process.env.ROS_BRIDGE_URI
             });
-            console.log('Robot: starting roseNode')
-            await this.#rosNode.start()
-
-            this.#subscription = this.#rosNode.subscribe({
-                topic: "/shotbot_gotoTarget",
-                dataType: "std_msgs/String",
-              });
-          
-            this.#subscription.on("message", (msg, data, pub) => {
-                console.log(
-                  `[MSG] ${JSON.stringify(msg)} (${
-                    data.byteLength
-                  } bytes from ${pub.connection.getTransportInfo()})`,
-                );
-              });
+            this.#listener = newRoslibTopic({
+                ros: this.#ros,
+                name: '/shotbot_targetReached',
+                messageType: 'std_msgs/Bool'
+            });
+            this.#listener.subscribe(function (message) {
+                console.log('Received message on ' + listener.name + ': ' + message.data);
+            });
         } catch (err) {
             console.error("Robot: init error: " + err)
-            this.#rosNode?.shutdown()
         }
-        */
     }
 
     IsIdle() {
@@ -108,7 +87,7 @@ export class Robot {
         execSync(`gcode-cli ${process.env.PATH_TO_GCODE}ausgabe_${whatDrink.toLowerCase()}.gcode ${process.env.GCODE_DEVICE}`)
         this.#updateLastAction();
 
-        
+
         /*
         // TODO: remove testing 
         setTimeout(() => {
