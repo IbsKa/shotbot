@@ -22,7 +22,7 @@ export class Robot {
     #lastAction = Date.now();
 
     #ros = undefined;
-    #listener = undefined;
+    #service = undefined;
 
     // holds the shots currently being poured (compare to order to know what to pour/do next)
     #currentRound = new Shots();
@@ -39,38 +39,11 @@ export class Robot {
             this.#ros = newRoslib({
                 url: process.env.ROS_BRIDGE_URI
             });
-            /*
-            this.#listener = newRoslibTopic({
-                ros: this.#ros,
-                name: '/shotbot_targetReached',
-                messageType: 'std_msgs/Bool'
-            });
-            this.#listener.subscribe(function (message) {
-                console.log('Received message on ' + listener.name + ': ' + message.data);
-            });
-            */
-            console.log(this.#ros.socket)
-            this.#ros.on("connection", function () {
-                console.log('connection established')
-
-                console.log('calling service now', shotbotServiceClient.callService)
-                shotbotServiceClient.callService(request, function (result) {
-                    console.log('Result for service call on '
-                        + shotbotServiceClient.name
-                        + ': '
-                        + result.destinationReached);
-                });
-            });
-            var shotbotServiceClient = newRoslibService({
+            this.#service = newRoslibService({
                 name: '/shotbot',
                 ros: this.#ros,
                 serviceType: 'shotbot/PositionMessage'
             });
-
-            var request = newRoslibServiceRequest({
-                target: "mydummy"
-            });
-
         } catch (err) {
             console.error("Robot: init error: " + err)
         }
@@ -90,11 +63,19 @@ export class Robot {
         this.#currentRound = new Shots(0, 0, 0); // reset shots poured
         this.#updateLastAction();
 
-        // TODO: remove testing 
-        setTimeout(() => {
-            console.log('reached position')
-            this.#state = ROBOTSTATE.Completed;
-        }, 15_000);
+        let request = newRoslibServiceRequest({
+            target: target
+        });
+        this.#service.callService(request, function (result) {
+            console.log('Robot: goto target completed, reached target: ' + result.destinationReached)
+            console.log(this)
+            if (result.destinationReached) {
+                this.#state = ROBOTSTATE.Completed
+                return
+            }
+            // TODO: error handling, what to do?
+            console.log("Robot: error, did not reach target")
+        }.bind(this));
     }
 
     Pour(whatDrink) {
