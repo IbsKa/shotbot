@@ -9,6 +9,7 @@ def receiveHandle(data):
     try:
         serviceHandler = rospy.ServiceProxy('shotbot', PositionMessage)
         response = serviceHandler(data.data)
+        rospy.loginfo("ShotBot Receiver: got response from service: %s", response.destinationReached)
 
     except rospy.ServiceException as ex:
         rospy.loginfo('ShotBot Receiver: error with service: %s', ex)
