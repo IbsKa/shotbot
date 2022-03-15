@@ -5,7 +5,7 @@ import { Shots } from "../order/order.js";
 import { execSync } from 'child_process';
 
 import pkg from './roslib.cjs';
-const { newRoslib } = pkg;
+const { newRoslib, newRoslibService, newRoslibServiceRequest } = pkg;
 
 export const ROBOTSTATE = {
     Idle: 0,        // robot bored, standing by
@@ -39,6 +39,7 @@ export class Robot {
             this.#ros = newRoslib({
                 url: process.env.ROS_BRIDGE_URI
             });
+            /*
             this.#listener = newRoslibTopic({
                 ros: this.#ros,
                 name: '/shotbot_targetReached',
@@ -47,6 +48,29 @@ export class Robot {
             this.#listener.subscribe(function (message) {
                 console.log('Received message on ' + listener.name + ': ' + message.data);
             });
+            */
+            console.log(this.#ros.socket)
+            this.#ros.on("connection", function () {
+                console.log('connection established')
+
+                console.log('calling service now', shotbotServiceClient.callService)
+                shotbotServiceClient.callService(request, function (result) {
+                    console.log('Result for service call on '
+                        + shotbotServiceClient.name
+                        + ': '
+                        + result.destinationReached);
+                });
+            });
+            var shotbotServiceClient = newRoslibService({
+                name: '/shotbot',
+                ros: this.#ros,
+                serviceType: 'shotbot/PositionMessage'
+            });
+
+            var request = newRoslibServiceRequest({
+                target: "mydummy"
+            });
+
         } catch (err) {
             console.error("Robot: init error: " + err)
         }
