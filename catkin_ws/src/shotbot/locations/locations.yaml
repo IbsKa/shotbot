@@ -1,7 +1,7 @@
 Bar:
     position:
-      x: 0.503
-      y: -3.657
+      x: 1.5
+      y: 2.5
       z: 0.0
     orientation:
       x: 0.0
@@ -11,11 +11,23 @@ Bar:
 
 Lounge:
     position:
-      x: -1.766
-      y: -1.562
+      x: 7
+      y: 0.6
       z: 0.0
     orientation:
       x: 0.0
       y: 0.0
       z: 0.907
       w: 0.420
+
+Dancefloor:
+    position:
+      x: 1.5
+      y: 2.5
+      z: 0
+    orientation:
+      x: 0
+      y: 0
+      z: 0
+      w: 0
+
