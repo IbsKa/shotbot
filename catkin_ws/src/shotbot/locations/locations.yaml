@@ -1,7 +1,7 @@
 Bar:
     position:
-      x: 1.5
-      y: 2.5
+      x: 4
+      y: 0
       z: 0.0
     orientation:
       x: 0.0
