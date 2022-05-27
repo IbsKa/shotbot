@@ -15,7 +15,7 @@ export default {
     ...mapMutations(['setRemainingShots', 'setOpenOrders', 'setConnectionState', 'setCurrentJob']),
     connect() {
       this.setConnectionState('not connected')
-      console.log('Starting connection to WebSocket Server')
+      console.log(`connecting to ws://${process.env.VUE_APP_SHOTBOT_IP}:${process.env.VUE_APP_BACKEND_PORT}`)
 
       setTimeout(() => {
         try {
