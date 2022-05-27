@@ -88,8 +88,9 @@ export class Robot {
         this.#state = ROBOTSTATE.Pouring;
         this.#currentRound[whatDrink]++;
         console.log('robot will pour ' + whatDrink)
+
         // gcode-cli /home/user/gcode-snippets/ausgabe_coldbrew.gcode /dev/ttyACM1,b9600
-//        execSync(`gcode-cli ${process.env.PATH_TO_GCODE}ausgabe_${whatDrink.toLowerCase()}.gcode ${process.env.GCODE_DEVICE}`)
+        execSync(`${process.env.PATH_TO_GCODEBIN} ${process.env.PATH_TO_GCODEFILES}ausgabe_${whatDrink.toLowerCase()}.gcode ${process.env.GCODE_DEVICE}`)
         this.#updateLastAction();
 
 
