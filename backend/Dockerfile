@@ -1,6 +1,10 @@
 FROM node:latest
-WORKDIR /usr/src/app
+WORKDIR /usr/src/
+RUN git clone https://github.com/hzeller/gcode-cli.git
+WORKDIR /usr/src/gcode-cli/
+RUN make
 
+WORKDIR /usr/src/app
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
