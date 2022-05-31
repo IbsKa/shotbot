@@ -106,7 +106,7 @@ const wss = new SocketServer({ server });
 
 // init Websocket ws and handle incoming connect requests
 wss.on('connection', function connection(ws) {
-  console.log("connection ...");
+  console.log("client connected");
 
   // 
   ws.on('message', function incoming(message) {
@@ -199,7 +199,6 @@ while (true) {
     if (nextShot === "") {
       console.log('all shots for this order served')
       curOrder.Status = ORDERSTATE.Completed;
-      ShotBot.Status = ROBOTSTATE.Idle;
       continue;
     }
 
