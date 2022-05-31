@@ -199,7 +199,7 @@ while (true) {
     if (nextShot === "") {
       console.log('all shots for this order served')
       curOrder.Status = ORDERSTATE.Completed;
-      console.log('TODO: what to do with robot')
+      ShotBot.Status = ROBOTSTATE.Idle;
       continue;
     }
 

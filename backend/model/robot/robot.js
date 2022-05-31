@@ -92,17 +92,11 @@ export class Robot {
         console.log('robot will pour ' + whatDrink)
 
         // gcode-cli /home/user/gcode-snippets/ausgabe_coldbrew.gcode /dev/ttyACM1,b9600
-        execSync(`${process.env.PATH_TO_GCODEBIN} ${process.env.PATH_TO_GCODEFILES}ausgabe_${whatDrink.toLowerCase()}.gcode ${process.env.GCODE_DEVICE}`)
         this.#updateLastAction();
-
-
+        execSync(`${process.env.PATH_TO_GCODEBIN} ${process.env.PATH_TO_GCODEFILES}ausgabe_${whatDrink.toLowerCase()}.gcode ${process.env.GCODE_DEVICE}`)
         
-        // TODO: remove testing 
-        setTimeout(() => {
-            console.log('drink poured')
-            this.#state = ROBOTSTATE.Completed;
-        }, 3_000);
-        
+        console.log('drink poured')
+        this.#state = ROBOTSTATE.Completed;
     }
 
     GoHome() {
