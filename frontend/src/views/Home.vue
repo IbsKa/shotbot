@@ -30,7 +30,7 @@ export default {
   },
   data: function () {
     return {
-      places: ['Bar', 'Lounge', 'Dancefloor', 'Speisesaal', 'Spiegelkabinett']
+      places: ['Test', 'Lounge', 'Dancefloor', 'Speisesaal', 'Spiegelkabinett']
     }
   },
   components: {}
