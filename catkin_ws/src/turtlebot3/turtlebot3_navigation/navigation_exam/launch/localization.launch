@@ -1,7 +1,7 @@
 <launch>
 
   <arg name="scan_topic" default="scan_filtered" />
-  <arg name="map_file" default="$(find turtlebot3_navigation)/maps/buero_ka.yaml"/>
+  <arg name="map_file" default="$(find turtlebot3_navigation)/maps/JM_WolvenBroklyn.yaml"/>
 
   <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
 

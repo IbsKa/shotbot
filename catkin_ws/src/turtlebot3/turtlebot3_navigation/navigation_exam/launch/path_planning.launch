@@ -30,6 +30,9 @@
   </include>
   ?>
 
+  <node pkg="shotbot" name="shotbot_service" type="shotbot_service_node.py" respawn="true" output="screen" />
+  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
+
   <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
 
     <param name="base_global_planner" value="$(arg base_global_planner)"/>

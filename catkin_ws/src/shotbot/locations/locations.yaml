@@ -1,33 +1,10 @@
-Bar:
+qqTest:
     position:
-      x: 4
-      y: 0
+      x: 1.21
+      y: 10.45
       z: 0.0
     orientation:
       x: 0.0
       y: 0.0
       z: -0.702
       w: 0.712
-
-Lounge:
-    position:
-      x: 7
-      y: 0.6
-      z: 0.0
-    orientation:
-      x: 0.0
-      y: 0.0
-      z: 0.907
-      w: 0.420
-
-Dancefloor:
-    position:
-      x: 1.5
-      y: 2.5
-      z: 0
-    orientation:
-      x: 0
-      y: 0
-      z: 0.1
-      w: 0.1
-
