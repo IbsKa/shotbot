@@ -36,6 +36,7 @@ export class Robot {
 
     async Init() {
         try {
+            console.log("Robot: setting up with "+process.env.ROS_BRIDGE_URI)
             this.#ros = newRoslib({
                 url: process.env.ROS_BRIDGE_URI
             });
@@ -44,6 +45,7 @@ export class Robot {
                 ros: this.#ros,
                 serviceType: 'shotbot/PositionMessage'
             });
+            console.log("Robot: set up and ready")
         } catch (err) {
             console.error("Robot: init error: " + err)
         }
