@@ -6,8 +6,8 @@ services:
     build:
       context: ./frontend
     ports:
-      - "8000:8080"
       - "443:443"
+      - "80:8080"
     environment:
       - VUE_APP_SHOTBOT_IP=${VUE_APP_SHOTBOT_IP}
       - VUE_APP_BACKEND_PORT=${VUE_APP_BACKEND_PORT}
@@ -19,9 +19,14 @@ services:
     ports:
       - "${VUE_APP_BACKEND_PORT}:8080"
     restart: unless-stopped
+    privileged: true
     volumes:
       - "./gcode_programme/:/var/gcode/"
     environment:
-      - VUE_APP_SHOTBOT_IP=${VUE_APP_SHOTBOT_IP}
       - VUE_APP_BACKEND_PORT=${VUE_APP_BACKEND_PORT}
       - VUE_APP_MAX_SHOTS=${VUE_APP_MAX_SHOTS}
+      - ROS_BRIDGE_URI=${ROS_BRIDGE_URI}
+      - PATH_TO_GCODEBIN=${PATH_TO_GCODEBIN}
+      - PATH_TO_GCODEFILES=${PATH_TO_GCODEFILES}
+      - GCODE_DEVICE=${GCODE_DEVICE}
+
