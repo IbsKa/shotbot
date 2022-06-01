@@ -45,6 +45,38 @@ app.get('/', function (req, res) {
   res.json({ status: "server is running!" })
 });
 
+// endpoint for making robot go home
+app.post('/gohome', (req, res) => {
+  console.log("request to send robot home received");
+  ShotBot.GoHome()
+  updateClients();
+  res.statusCode = 200;
+  res.send();
+  updateClients()
+})
+// endpoint for releasing robot from "home-lock"
+app.post('/releaserobot', (req, res) => {
+  console.log("request to release robot");
+  ShotBot.Release()
+  updateClients();
+  res.statusCode = 200;
+  res.send();
+})
+
+// endpoint for bringing the lift all the way down
+app.post('/refillcups', (req, res) => {
+  if (ShotBot.Status !== ROBOTSTATE.Homing) {
+    console.log('cannot lower tray while not in maintenance mode')
+    res.statusCode = 403
+    res.send()
+    return
+  }
+  console.log("request to refill cups");
+  ShotBot.RefillCups()
+  updateClients();
+  res.statusCode = 200;
+  res.send();
+})
 
 // endpoint for ordering new shots
 app.post('/orders', (req, res) => {
@@ -64,7 +96,7 @@ app.delete('/orders', (req, res) => {
   console.log("orders about to be deleted", openOrders)
 
   // add shots of current orders to remaining count
-  openOrders.forEach(o => {
+  openOrders.filter(o => o.Status !== ORDERSTATE.Completed).forEach(o => {
     Object.keys(o.shots).forEach(s => {
       remainingShots[s] += parseInt(o.shots[s])
     })
@@ -108,7 +140,6 @@ const wss = new SocketServer({ server });
 wss.on('connection', function connection(ws) {
   console.log("client connected");
 
-  // 
   ws.on('message', function incoming(message) {
     console.log('received: %s', message);
     connectedUsers.push(message);
@@ -118,12 +149,14 @@ wss.on('connection', function connection(ws) {
     console.log('client closed');
   })
 
-  //var statusMessage = {orders: openOrders, job: openOrders.length === 0 ? null : openOrders[0].place, remainingShots}
   ws.send(JSON.stringify(statusMessage()));
 });
 
 const statusMessage = () => {
-  return { orders: orderQueue, job: orderQueue.length === 0 ? null : orderQueue[0].Location, remainingShots }
+  let curJob = orderQueue.length === 0 ? null : orderQueue[0].Location;
+  if (ShotBot.Status === ROBOTSTATE.Homing)
+    curJob = "HOME"
+  return { orders: orderQueue, job: curJob, remainingShots }
 }
 
 const updateClients = () => {
@@ -139,8 +172,10 @@ while (true) {
   // sleep at the beginning to loop-reruns can wait without further code
   await new Promise(r => setTimeout(r, 1_000));
 
-  //console.log("OrderList: ", orderQueue);
-  //console.log("Robot: " + ShotBot.Status)
+  if (ShotBot.Status === ROBOTSTATE.Homing) {
+    console.log('Robot is returning home - no further processing')
+    continue
+  }
 
   if (orderQueue.length === 0) {
     console.log('no orders -> sleeping')
