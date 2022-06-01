@@ -5,6 +5,11 @@
   </div>
   <div v-else class="my-4">
     <div class="lead">Admin</div>
+
+    <div v-if="currentJob === 'HOME'" style="border-radius: 3px; border: 1px solid red">
+      <b>Roboter in Wartung</b><br>Nach Abschluss entsperren.
+    </div>
+
     <b-button style="width: 85%" class="mx-3 mt-3" variant="warning" size="lg" @click="goHome">Heimfahrt und warten</b-button>
     <p class="text-muted line-normal mt-1"><small>Der Roboter kehrt zu seiner Ausgangsposition zurück und wartet dort.</small></p>
     <hr color="gray">
@@ -77,7 +82,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['remainingShots'])
+    ...mapGetters(['remainingShots', 'currentJob'])
   },
   methods: {
     async goHome() {
