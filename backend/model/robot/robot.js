@@ -76,9 +76,9 @@ export class Robot {
         return this.Status === ROBOTSTATE.Idle || this.Status === ROBOTSTATE.Completed
     }
 
-    GoTo(target, skipReadinessCheck) {
+    GoTo(target, skipReadinessCheck = false) {
         console.log(`Robot: moving to position "${target}"`)
-        if (!this.IsIdle() || !skipReadinessCheck) {
+        if (!this.IsIdle() && skipReadinessCheck) {
             console.log('Robot: won\'t move, as robot is not idle');
             return;
         }
