@@ -122,6 +122,11 @@ export class Robot {
         execSync(`${process.env.PATH_TO_GCODEBIN} ${process.env.PATH_TO_GCODEFILES}becher_nachfuellen.gcode ${process.env.GCODE_DEVICE}`)
         this.#updateLastAction();
     }
+    RefillCupsFinalize() {
+        console.log('robot will raise tray')
+        execSync(`${process.env.PATH_TO_GCODEBIN} ${process.env.PATH_TO_GCODEFILES}becher_nachfuellen_2.gcode ${process.env.GCODE_DEVICE}`)
+        this.#updateLastAction();
+    }
 
     #updateLastAction() {
         this.#lastAction = Date.now();

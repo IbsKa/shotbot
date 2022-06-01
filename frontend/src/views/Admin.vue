@@ -38,8 +38,19 @@
       </div>
     </b-modal>
 
-    <b-button style="width: 85%" class="mx-3 mt-3 jaegerbg" variant="light" size="lg" @click="refillCups">Becher nachfüllen</b-button>
+    <b-button style="width: 85%" class="mx-3 mt-3 jaegerbg" variant="light" size="lg" v-b-modal.modalRefillCups @click="refillCups">Becher nachfüllen</b-button>
     <p class="text-muted line-normal mt-1"><small>Senkt den Becherstapel vollständig ab, um neue Becher einzufüllen</small></p>
+
+    <b-modal id="modalRefillCups" centered size="xl" title="Becher nachfüllen" header-bg-variant="dark" header-text-variant="light" body-bg-variant="dark" body-text-variant="light" footer-bg-variant="dark" ok-only ok-title="Becher wurden nachgefüllt" ok-variant="success" button-size="lg" @ok="finalizeRefillCups" no-close-on-esc no-close-on-backdrop hide-header-close>
+      <div class="lead my-5">
+        <ul>
+          <li>Der Roboter senkt nun den Becherstapel ab</li>
+          <li>Bitte Becher nachfüllen</li>
+          <li>Anschließend bestätigen</li>
+          <li>optional: Roboter wieder freigeben</li>
+      </div>
+    </b-modal>
+
 
     <hr color="gray">
     <b-button style="width: 85%" class="mx-3 mt-3" variant="success" size="lg" @click="releaseRobot">Roboter freigeben</b-button>
@@ -211,7 +222,27 @@ export default {
         try {
           const res = await axios.post(`http://${process.env.VUE_APP_SHOTBOT_IP}:${process.env.VUE_APP_BACKEND_PORT}/refillcups`)
           if (res.status === 200) {
-            this.$bvToast.toast('Kommando wird ausgeführt. Nach dem Befüllen bitte Roboter freigeben.', {
+            this.$bvToast.toast('Kommando wird ausgeführt.', {
+              title: 'Hat geklappt!',
+              variant: 'success',
+              solid: true,
+              autoHideDelay: 3000
+            })
+            return
+          }
+        } catch {
+          this.$bvToast.toast('Kommando nicht erfolgreich. Bitte sicherstellen, dass Roboter heimgefahren wurde.', {
+            title: 'Fehler',
+            variant: 'danger',
+            solid: true
+          })
+        }
+    },
+    async finalizeRefillCups() {
+        try {
+          const res = await axios.post(`http://${process.env.VUE_APP_SHOTBOT_IP}:${process.env.VUE_APP_BACKEND_PORT}/refillcupsfinalize`)
+          if (res.status === 200) {
+            this.$bvToast.toast('Kommando wird ausgeführt.', {
               title: 'Hat geklappt!',
               variant: 'success',
               solid: true,

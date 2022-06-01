@@ -71,8 +71,22 @@ app.post('/refillcups', (req, res) => {
     res.send()
     return
   }
-  console.log("request to refill cups");
+  console.log("request to lower tray");
   ShotBot.RefillCups()
+  updateClients();
+  res.statusCode = 200;
+  res.send();
+})
+// endpoint for bringing the lift all the way down
+app.post('/refillcupsfinalize', (req, res) => {
+  if (ShotBot.Status !== ROBOTSTATE.Homing) {
+    console.log('cannot raise tray while not in maintenance mode')
+    res.statusCode = 403
+    res.send()
+    return
+  }
+  console.log("request to raise tray");
+  ShotBot.RefillCupsFinalize()
   updateClients();
   res.statusCode = 200;
   res.send();
