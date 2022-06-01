@@ -78,7 +78,7 @@ export class Robot {
 
     GoTo(target, skipReadinessCheck) {
         console.log(`Robot: moving to position "${target}"`)
-        if (!this.IsIdle() || skipReadinessCheck) {
+        if (!this.IsIdle() || !skipReadinessCheck) {
             console.log('Robot: won\'t move, as robot is not idle');
             return;
         }
