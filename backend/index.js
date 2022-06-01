@@ -183,7 +183,7 @@ console.log('setting up robot')
 ShotBot.Init()
 
 // await robot connection
-while (!ShotBot.IsConnected()) {
+while (!ShotBot.IsConnected) {
   console.log('awaiting ROS Bridge connection...')
   await new Promise(r => setTimeout(r, 1_000));
 }
