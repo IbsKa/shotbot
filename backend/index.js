@@ -119,7 +119,7 @@ app.post('/remaining', (req, res) => {
     spicy: parseInt(req.body.spicy)
   }
 
-  if (remainingShots.coldBrew === 0 && remainingShots.normal === 0 && remainingShots.spicy === 0) {
+  if (remainingShots.ColdBrew === 0 && remainingShots.Normal === 0 && remainingShots.Spicy === 0) {
     openOrders = []
   }
 
