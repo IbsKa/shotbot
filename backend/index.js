@@ -107,17 +107,17 @@ app.post('/orders', (req, res) => {
 // endpoint for deleting all running orders
 app.delete('/orders', (req, res) => {
   console.log("purge req", req.body);
-  console.log("orders about to be deleted", openOrders)
+  console.log("orders about to be deleted", orderQueue)
 
   // add shots of current orders to remaining count
-  openOrders.filter(o => o.Status !== ORDERSTATE.Completed).forEach(o => {
-    Object.keys(o.shots).forEach(s => {
-      remainingShots[s] += parseInt(o.shots[s])
+  orderQueue.filter(o => o.Status !== ORDERSTATE.Completed).forEach(o => {
+    Object.keys(o.Shots).forEach(s => {
+      remainingShots[s] += parseInt(o.Shots[s])
     })
   });
   console.log("remaining shots", remainingShots)
   // delete all orders
-  openOrders = [];
+  orderQueue = [];
 
   updateClients();
   res.statusCode = 200;
@@ -128,13 +128,13 @@ app.delete('/orders', (req, res) => {
 app.post('/remaining', (req, res) => {
   console.log("remaining post req", req.body);
   remainingShots = {
-    coldBrew: parseInt(req.body.coldBrew),
-    normal: parseInt(req.body.normal),
-    spicy: parseInt(req.body.spicy)
+    ColdBrew: parseInt(req.body.coldBrew),
+    Normal: parseInt(req.body.normal),
+    Spicy: parseInt(req.body.spicy)
   }
 
   if (remainingShots.ColdBrew === 0 && remainingShots.Normal === 0 && remainingShots.Spicy === 0) {
-    openOrders = []
+    orderQueue = []
   }
 
   updateClients();
