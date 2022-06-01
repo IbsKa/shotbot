@@ -6,7 +6,7 @@
   <div v-else class="my-4">
     <div class="lead">Admin</div>
 
-    <div v-if="currentJob === 'HOME'" style="border-radius: 3px; border: 1px solid red">
+    <div v-if="currentJob === 'HOME'" style="border-radius: 5px; border: 3px solid red" class="m-5 p-5">
       <b>Roboter in Wartung</b><br>Nach Abschluss entsperren.
     </div>
 
