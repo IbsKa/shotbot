@@ -1,7 +1,4 @@
 import { Shots } from "../order/order.js";
-//import { RosNode } from "@foxglove/ros1";
-//import { getEnvVar, getHostname, getNetworkInterfaces, getPid, TcpSocketNode } from "@foxglove/ros1/nodejs";
-//import { HttpServerNodejs } from "@foxglove/xmlrpc/nodejs";
 import { execSync } from 'child_process';
 
 import pkg from './roslib.cjs';
