@@ -49,7 +49,7 @@ export class Robot {
         } catch (err) {
             console.error("Robot: init error: " + err)
         }
-
+/*
         this.#ros.on('connection', function() {
             this.#isConnected = true
         });
@@ -65,6 +65,7 @@ export class Robot {
             this.#isConnected = false
             Init()
         });
+        */
     }
 
     #connect() {
