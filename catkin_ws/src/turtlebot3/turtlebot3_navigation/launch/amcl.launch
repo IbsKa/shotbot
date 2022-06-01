@@ -1,8 +1,8 @@
 <launch>
   <!-- Arguments -->
-  <arg name="initial_pose_x" default="-0.046"/>
-  <arg name="initial_pose_y" default="-0.009"/>
-  <arg name="initial_pose_a" default="2.129"/>
+  <arg name="initial_pose_x" default="3.37"/>
+  <arg name="initial_pose_y" default="10.458"/>
+  <arg name="initial_pose_a" default="1.897"/>
 
   <!-- AMCL -->
   <node pkg="amcl" type="amcl" name="amcl">
