@@ -39,9 +39,9 @@
         <b-container class="text-left" no-gutters fluid="true">
           <b-row class="mt-4">
             <b-col cols="2">
-              <b-badge variant="primary" style="font-size: 1.2rem">{{ index + 1 }}</b-badge> {{ order.Location}}
+              <b-badge variant="primary" style="font-size: 1.2rem">{{ index + 1 }}</b-badge>
             </b-col>
-            <b-col cols="10" class="text-left font-weight-bold" style="font-size: 1.2rem"> {{ order.place }} </b-col>
+            <b-col cols="10" class="text-left font-weight-bold" style="font-size: 1.2rem"> {{ order.Location }} </b-col>
           </b-row>
           <b-row class="mt-2" style="font-size: 1.1rem">
             <b-col cols="4">Normal:&nbsp;{{ order.Shots.Normal }}</b-col>

@@ -41,13 +41,15 @@
     <b-button style="width: 85%" class="mx-3 mt-3 jaegerbg" variant="light" size="lg" v-b-modal.modalRefillCups @click="refillCups">Becher nachfüllen</b-button>
     <p class="text-muted line-normal mt-1"><small>Senkt den Becherstapel vollständig ab, um neue Becher einzufüllen</small></p>
 
-    <b-modal id="modalRefillCups" centered size="xl" title="Becher nachfüllen" header-bg-variant="dark" header-text-variant="light" body-bg-variant="dark" body-text-variant="light" footer-bg-variant="dark" ok-only ok-title="Becher wurden nachgefüllt" ok-variant="success" button-size="lg" @ok="finalizeRefillCups" no-close-on-esc no-close-on-backdrop hide-header-close>
+    <b-modal id="modalRefillCups" centered size="xl" title="Becher nachfüllen" header-bg-variant="dark" header-text-variant="light" body-bg-variant="dark" body-text-variant="light" footer-bg-variant="dark" ok-only ok-title="Becher wurden nachgefüllt" ok-variant="success" button-size="lg" :ok-disabled="okBtnRefillCups" @ok="finalizeRefillCups" no-close-on-esc no-close-on-backdrop hide-header-close>
       <div class="lead my-5">
+        <b-spinner v-if="!okBtnRefillCups" />
         <ul>
           <li>Der Roboter senkt nun den Becherstapel ab</li>
           <li>Bitte Becher nachfüllen</li>
           <li>Anschließend bestätigen</li>
           <li>optional: Roboter wieder freigeben</li>
+        </ul>
       </div>
     </b-modal>
 
@@ -70,7 +72,8 @@ export default {
       normal: this.$store.state.remainingShots.normal,
       spicy: this.$store.state.remainingShots.spicy,
       coldBrew: this.$store.state.remainingShots.coldBrew,
-      maxShots: process.env.VUE_APP_MAX_SHOTS
+      maxShots: process.env.VUE_APP_MAX_SHOTS,
+      okBtnRefillCups: true
     }
   },
   computed: {
@@ -220,14 +223,16 @@ export default {
     },
     async refillCups() {
         try {
+          this.okBtnRefillCups = false
           const res = await axios.post(`http://${process.env.VUE_APP_SHOTBOT_IP}:${process.env.VUE_APP_BACKEND_PORT}/refillcups`)
           if (res.status === 200) {
-            this.$bvToast.toast('Kommando wird ausgeführt.', {
+            this.$bvToast.toast('Becherstapel abgesenkt', {
               title: 'Hat geklappt!',
               variant: 'success',
               solid: true,
               autoHideDelay: 3000
             })
+            this.okBtnRefillCups = true
             return
           }
         } catch {
@@ -240,9 +245,10 @@ export default {
     },
     async finalizeRefillCups() {
         try {
+          this.okBtnRefillCups = false
           const res = await axios.post(`http://${process.env.VUE_APP_SHOTBOT_IP}:${process.env.VUE_APP_BACKEND_PORT}/refillcupsfinalize`)
           if (res.status === 200) {
-            this.$bvToast.toast('Kommando wird ausgeführt.', {
+            this.$bvToast.toast('Becherstapel in Position!', {
               title: 'Hat geklappt!',
               variant: 'success',
               solid: true,
