@@ -46,9 +46,13 @@
     <b-button style="width: 85%" class="mx-3 mt-3 jaegerbg" variant="light" size="lg" v-b-modal.modalRefillCups @click="refillCups">Becher nachfüllen</b-button>
     <p class="text-muted line-normal mt-1"><small>Senkt den Becherstapel vollständig ab, um neue Becher einzufüllen</small></p>
 
-    <b-modal id="modalRefillCups" centered size="xl" title="Becher nachfüllen" header-bg-variant="dark" header-text-variant="light" body-bg-variant="dark" body-text-variant="light" footer-bg-variant="dark" ok-only ok-title="Becher wurden nachgefüllt" ok-variant="success" button-size="lg" :ok-disabled="okBtnRefillCups" @ok="finalizeRefillCups" no-close-on-esc no-close-on-backdrop hide-header-close>
+    <b-modal id="modalRefillCups" centered size="xl" title="Becher nachfüllen" header-bg-variant="dark" header-text-variant="light" body-bg-variant="dark" body-text-variant="light" footer-bg-variant="dark" ok-only ok-title="Becher wurden nachgefüllt" ok-variant="success" button-size="lg" :ok-disabled="!okBtnRefillCups" @ok="finalizeRefillCups" no-close-on-esc no-close-on-backdrop hide-header-close>
       <div class="lead my-5">
-        <b-spinner v-if="!okBtnRefillCups" />
+        <template v-if="!okBtnRefillCups">
+          <b-spinner /><br><br>
+          Becherstapel wird abgesenkt
+        </template>
+        <br><br>
         <ul>
           <li>Der Roboter senkt nun den Becherstapel ab</li>
           <li>Bitte Becher nachfüllen</li>
