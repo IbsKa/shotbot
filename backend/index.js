@@ -252,6 +252,7 @@ while (true) {
     }
 
     ShotBot.Pour(nextShot);
+    updateClients()
     continue;
   }
 

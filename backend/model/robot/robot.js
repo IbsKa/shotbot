@@ -56,9 +56,9 @@ export class Robot {
         return this.Status === ROBOTSTATE.Idle || this.Status === ROBOTSTATE.Completed
     }
 
-    GoTo(target) {
+    GoTo(target, skipReadinessCheck) {
         console.log(`Robot: moving to position "${target}"`)
-        if (!this.IsIdle()) {
+        if (!this.IsIdle() || skipReadinessCheck) {
             console.log('Robot: won\'t move, as robot is not idle');
             return;
         }
@@ -78,7 +78,7 @@ export class Robot {
                 return
             }
             console.log("Robot: error, did not reach target -> trying to return home")
-            this.GoTo('Home')
+            this.GoHome()
         }.bind(this));
     }
 
@@ -104,7 +104,7 @@ export class Robot {
         // abort operations and go home
         console.log('Robot: returning to base')
         this.#currentRound = new Shots(0, 0, 0);
-        this.GoTo('Home')
+        this.GoTo('Home', true)
         this.#state = ROBOTSTATE.Homing
         this.#updateLastAction();
     }
