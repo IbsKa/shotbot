@@ -20,10 +20,10 @@ export default {
       if (orders.length === 0 && job === null) {
         console.log('no open orders')
         return 'Ruht sich aus'
-      } else if (orders.length === 0) {
+      } else if (orders.length === 0 || job === 'HOME') {
         return 'fährt nach Hause'
       } else {
-        return 'fährt in Richtung ' + job
+        return 'unterwegs in Richtung ' + job
       }
     }
   }

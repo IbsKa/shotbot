@@ -47,9 +47,9 @@ export default {
       try {
         this.isOrdered = true
         const res = await axios.post(`http://${process.env.VUE_APP_SHOTBOT_IP}:${process.env.VUE_APP_BACKEND_PORT}/remaining`, {
-          normal: this.normal,
-          spicy: this.spicy,
-          coldBrew: this.coldBrew
+          normal: parseInt(this.normal),
+          spicy: parseInt(this.spicy),
+          coldBrew: parseInt(this.coldBrew)
         })
         if (res.status === 200) {
           this.$bvToast.toast('Verbleibende Shots erfolgreich geändert!', {

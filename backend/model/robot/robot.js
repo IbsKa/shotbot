@@ -12,6 +12,7 @@ export const ROBOTSTATE = {
     Moving: 2,      // moving to a location
     Pouring: 4,     // at a location, serving shots
     Completed: 8,   // job done (could've been moving or pouring [one shot])
+    Homing: 50,     // robot returning home / orders are not being processed
     Fault: 99       // robot fell down stairs
 }
 
@@ -36,6 +37,7 @@ export class Robot {
 
     async Init() {
         try {
+            console.log("Robot: setting up with "+process.env.ROS_BRIDGE_URI)
             this.#ros = newRoslib({
                 url: process.env.ROS_BRIDGE_URI
             });
@@ -44,6 +46,7 @@ export class Robot {
                 ros: this.#ros,
                 serviceType: 'shotbot/PositionMessage'
             });
+            console.log("Robot: set up and ready")
         } catch (err) {
             console.error("Robot: init error: " + err)
         }
@@ -70,11 +73,12 @@ export class Robot {
             console.log('Robot: goto target completed, reached target: ' + result.destinationReached)
             console.log(this)
             if (result.destinationReached) {
-                this.#state = ROBOTSTATE.Completed
+                if (this.#state != ROBOTSTATE.Homing)
+                    this.#state = ROBOTSTATE.Completed
                 return
             }
-            // TODO: error handling, what to do?
-            console.log("Robot: error, did not reach target")
+            console.log("Robot: error, did not reach target -> trying to return home")
+            this.GoTo('Home')
         }.bind(this));
     }
 
@@ -89,25 +93,33 @@ export class Robot {
         this.#currentRound[whatDrink]++;
         console.log('robot will pour ' + whatDrink)
 
-        // gcode-cli /home/user/gcode-snippets/ausgabe_coldbrew.gcode /dev/ttyACM1,b9600
-        execSync(`${process.env.PATH_TO_GCODEBIN} ${process.env.PATH_TO_GCODEFILES}ausgabe_${whatDrink.toLowerCase()}.gcode ${process.env.GCODE_DEVICE}`)
         this.#updateLastAction();
-
-
+        execSync(`${process.env.PATH_TO_GCODEBIN} ${process.env.PATH_TO_GCODEFILES}ausgabe_${whatDrink.toLowerCase()}.gcode ${process.env.GCODE_DEVICE}`)
         
-        // TODO: remove testing 
-        setTimeout(() => {
-            console.log('drink poured')
-            this.#state = ROBOTSTATE.Completed;
-        }, 3_000);
-        
+        console.log('drink poured')
+        this.#state = ROBOTSTATE.Completed;
     }
 
     GoHome() {
         // abort operations and go home
         console.log('Robot: returning to base')
         this.#currentRound = new Shots(0, 0, 0);
-        // TODO: talk to robot
+        this.GoTo('Home')
+        this.#state = ROBOTSTATE.Homing
+        this.#updateLastAction();
+    }
+
+    Release() {
+        // releases robot from homing and sets state to idle
+        console.log('Robot: releasing "homing"-lock')
+        if (this.#state === ROBOTSTATE.Homing)
+            this.#state = ROBOTSTATE.Idle
+        this.#updateLastAction();
+    }
+
+    RefillCups() {
+        console.log('robot will lower tray')
+        execSync(`${process.env.PATH_TO_GCODEBIN} ${process.env.PATH_TO_GCODEFILES}becher_nachfuellen.gcode ${process.env.GCODE_DEVICE}`)
         this.#updateLastAction();
     }
 
