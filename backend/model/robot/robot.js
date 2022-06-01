@@ -14,6 +14,7 @@ export const ROBOTSTATE = {
 }
 
 export class Robot {
+    #isConnected = false;
     // the current state the robot is in (private via getter)
     #state = ROBOTSTATE.Idle;
     // when was the last time we talked to the ShotBot (for timeouts)
@@ -31,6 +32,7 @@ export class Robot {
     get Status() { return this.#state; }
     get LastAction() { return this.#lastAction; }
     get CurrentRound() { return this.#currentRound; }
+    get IsConnected() { return this.#isConnected; }
 
     async Init() {
         try {
@@ -43,10 +45,30 @@ export class Robot {
                 ros: this.#ros,
                 serviceType: 'shotbot/PositionMessage'
             });
-            console.log("Robot: set up and ready")
+            console.log("Robot: set up, awaiting connection")
         } catch (err) {
             console.error("Robot: init error: " + err)
         }
+
+        this.#ros.on('connection', function() {
+            this.#isConnected = true
+        });
+        
+        this.#ros.on('error', function(error) {
+            console.log('Robot: Error connecting to websocket server: ', error);
+            this.#isConnected = false
+            Init()
+        });
+        
+        this.#ros.on('close', function() {
+            console.log('Robot: Connection to websocket server closed.');
+            this.#isConnected = false
+            Init()
+        });
+    }
+
+    #connect() {
+
     }
 
     IsIdle() {

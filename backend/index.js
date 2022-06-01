@@ -180,7 +180,15 @@ const updateClients = () => {
 }
 
 console.log('setting up robot')
-await ShotBot.Init()
+ShotBot.Init()
+
+// await robot connection
+while (!ShotBot.IsConnected()) {
+  console.log('awaiting ROS Bridge connection...')
+  await new Promise(r => setTimeout(r, 1_000));
+}
+
+console.log('all systems GO')
 
 while (true) {
   // sleep at the beginning to loop-reruns can wait without further code
