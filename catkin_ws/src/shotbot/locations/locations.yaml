@@ -1,33 +1,76 @@
-Bar:
+Home:
     position:
-      x: 4
-      y: 0
-      z: 0.0
-    orientation:
-      x: 0.0
-      y: 0.0
-      z: -0.702
-      w: 0.712
-
-Lounge:
-    position:
-      x: 7
-      y: 0.6
-      z: 0.0
-    orientation:
-      x: 0.0
-      y: 0.0
-      z: 0.907
-      w: 0.420
-
-Dancefloor:
-    position:
-      x: 1.5
-      y: 2.5
+      x: 3.370
+      y: 10.458
       z: 0
     orientation:
       x: 0
       y: 0
-      z: 0.1
-      w: 0.1
+      z: 0.812
+      w: 0.583
 
+Bar:
+    position:
+      x: 2.6
+      y: 0.92
+      z: 0
+    orientation:
+      x: 0
+      y: 0
+      z: 0.81
+      w: 0.586
+
+Rondell:
+    position:
+      x: 0.77
+      y: 15.36
+      z: 0
+    orientation:
+      x: 0
+      y: 0
+      z: 0.979
+      w: 0.201
+
+TafelVorne:
+    position:
+      x: 2.6
+      y: 0.92
+      z: 0
+    orientation:
+      x: 0
+      y: 0
+      z: 0.81
+      w: 0.586
+
+TafelHinten:
+    position:
+      x: -2.11
+      y: 9.8
+      z: 0
+    orientation:
+      x: 0
+      y: 0
+      z: 0.977
+      w: -0.214
+
+MeetingBox:
+    position:
+      x: 0.055
+      y: 18.35
+      z: 0
+    orientation:
+      x: 0
+      y: 0
+      z: 0.997
+      w: 0.077
+
+Podium:
+    position:
+      x: -0.995
+      y: 25.795
+      z: 0
+    orientation:
+      x: 0
+      y: 0
+      z: 0.22
+      w: 0.975
