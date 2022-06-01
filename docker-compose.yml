@@ -6,8 +6,8 @@ services:
     build:
       context: ./frontend
     ports:
+      - "80:80"
       - "443:443"
-      - "80:8080"
     environment:
       - VUE_APP_SHOTBOT_IP=${VUE_APP_SHOTBOT_IP}
       - VUE_APP_BACKEND_PORT=${VUE_APP_BACKEND_PORT}

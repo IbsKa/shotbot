@@ -5,6 +5,11 @@
   </div>
   <div v-else class="my-4">
     <div class="lead">Admin</div>
+
+    <div v-if="currentJob === 'HOME'" style="border-radius: 5px; border: 3px solid red" class="m-5 p-5">
+      <b>Roboter in Wartung</b><br>Nach Abschluss entsperren.
+    </div>
+
     <b-button style="width: 85%" class="mx-3 mt-3" variant="warning" size="lg" @click="goHome">Heimfahrt und warten</b-button>
     <p class="text-muted line-normal mt-1"><small>Der Roboter kehrt zu seiner Ausgangsposition zurück und wartet dort.</small></p>
     <hr color="gray">
@@ -38,8 +43,25 @@
       </div>
     </b-modal>
 
-    <b-button style="width: 85%" class="mx-3 mt-3 jaegerbg" variant="light" size="lg" @click="refillCups">Becher nachfüllen</b-button>
+    <b-button style="width: 85%" class="mx-3 mt-3 jaegerbg" variant="light" size="lg" v-b-modal.modalRefillCups @click="refillCups">Becher nachfüllen</b-button>
     <p class="text-muted line-normal mt-1"><small>Senkt den Becherstapel vollständig ab, um neue Becher einzufüllen</small></p>
+
+    <b-modal id="modalRefillCups" centered size="xl" title="Becher nachfüllen" header-bg-variant="dark" header-text-variant="light" body-bg-variant="dark" body-text-variant="light" footer-bg-variant="dark" ok-only ok-title="Becher wurden nachgefüllt" ok-variant="success" button-size="lg" :ok-disabled="!okBtnRefillCups" @ok="finalizeRefillCups" no-close-on-esc no-close-on-backdrop hide-header-close>
+      <div class="lead my-5">
+        <template v-if="!okBtnRefillCups">
+          <b-spinner /><br><br>
+          Becherstapel wird abgesenkt
+        </template>
+        <br><br>
+        <ul>
+          <li>Der Roboter senkt nun den Becherstapel ab</li>
+          <li>Bitte Becher nachfüllen</li>
+          <li>Anschließend bestätigen</li>
+          <li>optional: Roboter wieder freigeben</li>
+        </ul>
+      </div>
+    </b-modal>
+
 
     <hr color="gray">
     <b-button style="width: 85%" class="mx-3 mt-3" variant="success" size="lg" @click="releaseRobot">Roboter freigeben</b-button>
@@ -59,11 +81,12 @@ export default {
       normal: this.$store.state.remainingShots.normal,
       spicy: this.$store.state.remainingShots.spicy,
       coldBrew: this.$store.state.remainingShots.coldBrew,
-      maxShots: process.env.VUE_APP_MAX_SHOTS
+      maxShots: process.env.VUE_APP_MAX_SHOTS,
+      okBtnRefillCups: true
     }
   },
   computed: {
-    ...mapGetters(['remainingShots'])
+    ...mapGetters(['remainingShots', 'currentJob'])
   },
   methods: {
     async goHome() {
@@ -209,9 +232,32 @@ export default {
     },
     async refillCups() {
         try {
+          this.okBtnRefillCups = false
           const res = await axios.post(`http://${process.env.VUE_APP_SHOTBOT_IP}:${process.env.VUE_APP_BACKEND_PORT}/refillcups`)
           if (res.status === 200) {
-            this.$bvToast.toast('Kommando wird ausgeführt. Nach dem Befüllen bitte Roboter freigeben.', {
+            this.$bvToast.toast('Becherstapel abgesenkt', {
+              title: 'Hat geklappt!',
+              variant: 'success',
+              solid: true,
+              autoHideDelay: 3000
+            })
+            this.okBtnRefillCups = true
+            return
+          }
+        } catch {
+          this.$bvToast.toast('Kommando nicht erfolgreich. Bitte sicherstellen, dass Roboter heimgefahren wurde.', {
+            title: 'Fehler',
+            variant: 'danger',
+            solid: true
+          })
+        }
+    },
+    async finalizeRefillCups() {
+        try {
+          this.okBtnRefillCups = false
+          const res = await axios.post(`http://${process.env.VUE_APP_SHOTBOT_IP}:${process.env.VUE_APP_BACKEND_PORT}/refillcupsfinalize`)
+          if (res.status === 200) {
+            this.$bvToast.toast('Becherstapel in Position!', {
               title: 'Hat geklappt!',
               variant: 'success',
               solid: true,

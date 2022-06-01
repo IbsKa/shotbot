@@ -1,7 +1,4 @@
 import { Shots } from "../order/order.js";
-//import { RosNode } from "@foxglove/ros1";
-//import { getEnvVar, getHostname, getNetworkInterfaces, getPid, TcpSocketNode } from "@foxglove/ros1/nodejs";
-//import { HttpServerNodejs } from "@foxglove/xmlrpc/nodejs";
 import { execSync } from 'child_process';
 
 import pkg from './roslib.cjs';
@@ -17,6 +14,7 @@ export const ROBOTSTATE = {
 }
 
 export class Robot {
+    #isConnected = false;
     // the current state the robot is in (private via getter)
     #state = ROBOTSTATE.Idle;
     // when was the last time we talked to the ShotBot (for timeouts)
@@ -34,6 +32,7 @@ export class Robot {
     get Status() { return this.#state; }
     get LastAction() { return this.#lastAction; }
     get CurrentRound() { return this.#currentRound; }
+    get IsConnected() { return this.#isConnected; }
 
     async Init() {
         try {
@@ -46,19 +45,40 @@ export class Robot {
                 ros: this.#ros,
                 serviceType: 'shotbot/PositionMessage'
             });
-            console.log("Robot: set up and ready")
+            console.log("Robot: set up, awaiting connection")
         } catch (err) {
             console.error("Robot: init error: " + err)
         }
+/*
+        this.#ros.on('connection', function() {
+            this.#isConnected = true
+        });
+        
+        this.#ros.on('error', function(error) {
+            console.log('Robot: Error connecting to websocket server: ', error);
+            this.#isConnected = false
+            Init()
+        });
+        
+        this.#ros.on('close', function() {
+            console.log('Robot: Connection to websocket server closed.');
+            this.#isConnected = false
+            Init()
+        });
+        */
+    }
+
+    #connect() {
+
     }
 
     IsIdle() {
         return this.Status === ROBOTSTATE.Idle || this.Status === ROBOTSTATE.Completed
     }
 
-    GoTo(target) {
+    GoTo(target, skipReadinessCheck = false) {
         console.log(`Robot: moving to position "${target}"`)
-        if (!this.IsIdle()) {
+        if (!this.IsIdle() && skipReadinessCheck) {
             console.log('Robot: won\'t move, as robot is not idle');
             return;
         }
@@ -78,7 +98,7 @@ export class Robot {
                 return
             }
             console.log("Robot: error, did not reach target -> trying to return home")
-            this.GoTo('Home')
+            this.GoHome()
         }.bind(this));
     }
 
@@ -104,7 +124,7 @@ export class Robot {
         // abort operations and go home
         console.log('Robot: returning to base')
         this.#currentRound = new Shots(0, 0, 0);
-        this.GoTo('Home')
+        this.GoTo('Home', true)
         this.#state = ROBOTSTATE.Homing
         this.#updateLastAction();
     }
@@ -120,6 +140,11 @@ export class Robot {
     RefillCups() {
         console.log('robot will lower tray')
         execSync(`${process.env.PATH_TO_GCODEBIN} ${process.env.PATH_TO_GCODEFILES}becher_nachfuellen.gcode ${process.env.GCODE_DEVICE}`)
+        this.#updateLastAction();
+    }
+    RefillCupsFinalize() {
+        console.log('robot will raise tray')
+        execSync(`${process.env.PATH_TO_GCODEBIN} ${process.env.PATH_TO_GCODEFILES}becher_nachfuellen_2.gcode ${process.env.GCODE_DEVICE}`)
         this.#updateLastAction();
     }
 

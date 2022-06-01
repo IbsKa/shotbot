@@ -32,7 +32,7 @@ var remainingShots = new Shots(shotCapacity, shotCapacity, shotCapacity);
 var orderQueue = []
 
 // configure timeouts (in seconds)
-const TIMEOUT_MOVEMENT = 5 * 60;
+const TIMEOUT_MOVEMENT = 10 * 60;
 const TIMEOUT_POURING = 30; // one drink!
 
 
@@ -71,8 +71,22 @@ app.post('/refillcups', (req, res) => {
     res.send()
     return
   }
-  console.log("request to refill cups");
+  console.log("request to lower tray");
   ShotBot.RefillCups()
+  updateClients();
+  res.statusCode = 200;
+  res.send();
+})
+// endpoint for bringing the lift all the way down
+app.post('/refillcupsfinalize', (req, res) => {
+  if (ShotBot.Status !== ROBOTSTATE.Homing) {
+    console.log('cannot raise tray while not in maintenance mode')
+    res.statusCode = 403
+    res.send()
+    return
+  }
+  console.log("request to raise tray");
+  ShotBot.RefillCupsFinalize()
   updateClients();
   res.statusCode = 200;
   res.send();
@@ -93,17 +107,17 @@ app.post('/orders', (req, res) => {
 // endpoint for deleting all running orders
 app.delete('/orders', (req, res) => {
   console.log("purge req", req.body);
-  console.log("orders about to be deleted", openOrders)
+  console.log("orders about to be deleted", orderQueue)
 
   // add shots of current orders to remaining count
-  openOrders.filter(o => o.Status !== ORDERSTATE.Completed).forEach(o => {
-    Object.keys(o.shots).forEach(s => {
-      remainingShots[s] += parseInt(o.shots[s])
+  orderQueue.filter(o => o.Status !== ORDERSTATE.Completed).forEach(o => {
+    Object.keys(o.Shots).forEach(s => {
+      remainingShots[s] += parseInt(o.Shots[s])
     })
   });
   console.log("remaining shots", remainingShots)
   // delete all orders
-  openOrders = [];
+  orderQueue = [];
 
   updateClients();
   res.statusCode = 200;
@@ -114,13 +128,13 @@ app.delete('/orders', (req, res) => {
 app.post('/remaining', (req, res) => {
   console.log("remaining post req", req.body);
   remainingShots = {
-    coldBrew: parseInt(req.body.coldBrew),
-    normal: parseInt(req.body.normal),
-    spicy: parseInt(req.body.spicy)
+    ColdBrew: parseInt(req.body.coldBrew),
+    Normal: parseInt(req.body.normal),
+    Spicy: parseInt(req.body.spicy)
   }
 
-  if (remainingShots.coldBrew === 0 && remainingShots.normal === 0 && remainingShots.spicy === 0) {
-    openOrders = []
+  if (remainingShots.ColdBrew === 0 && remainingShots.Normal === 0 && remainingShots.Spicy === 0) {
+    orderQueue = []
   }
 
   updateClients();
@@ -166,7 +180,15 @@ const updateClients = () => {
 }
 
 console.log('setting up robot')
-await ShotBot.Init()
+ShotBot.Init()
+/*
+// await robot connection
+while (!ShotBot.IsConnected) {
+  console.log('awaiting ROS Bridge connection...')
+  await new Promise(r => setTimeout(r, 1_000));
+}
+*/
+console.log('all systems GO')
 
 while (true) {
   // sleep at the beginning to loop-reruns can wait without further code
@@ -238,6 +260,7 @@ while (true) {
     }
 
     ShotBot.Pour(nextShot);
+    updateClients()
     continue;
   }
 
